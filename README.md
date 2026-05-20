@@ -1,16 +1,92 @@
 # ziwei-ai-html-report
 
-离线紫微斗数报告工具包：输入出生信息或命盘上下文，输出可保存与分享的单文件 HTML 报告。
+用 **AI 编程助手**（Cursor、Claude Code、Codex 等）为你的出生资料生成一份 **可保存、可分享的紫微斗数 AI 命盘报告**（单个 HTML 文件，含排盘示意图、综合解读、流年与人生运势 K 线示意）。
 
-本目录为完整开源内容，复制本文件夹即可运行，不索引仓库其他目录。
+> 报告内容为传统术数的结构化展示与文字解读，**仅供文化学习与个人参考**，请勿用于医疗、投资或重大决策依据。
 
-## 你是哪类用户
+---
 
-- **普通用户（最快）**：看 `30 秒上手`，复制命令直接生成上下文。
-- **Agent 用户（Codex/Claude/Minimax）**：看 `Agent 通用契约`，按统一输入/输出协议调用。
-- **开发者（二次开发）**：看 `开发者入口`，了解算法口径、测试与扩展点。
+## 适合谁
 
-## 30 秒上手
+- 希望 **对话里说清生日**，就让 AI 按固定规则排盘并写出报告的人。
+- 需要 **离线 HTML**（可双击打开、发邮件、存网盘），而不是只在某个 App 里看的人。
+
+你 **不需要** 自己懂紫微斗数术语；按下面的格式提供信息即可。AI 会依照本仓库里的 **Skill**（`SKILL.md`）与提示词约定来生成内容。
+
+---
+
+## 第一次用：把本 Skill 装到你的工具里
+
+思路都一样：**让 AI 能读到你本仓库里的 `SKILL.md` 和配套文件**。具体目录名因产品而异，下面是最常见的做法。
+
+### 1）Cursor
+
+- **做法 A（推荐）**：把整个仓库克隆到你的电脑，在 Cursor 里 **打开该文件夹作为工作区**，或把仓库放进你当前项目下的子目录（例如 `skills/ziwei-ai-html-report/`）。
+- **做法 B**：若你使用 Cursor 的 **Agent Skills**：把本仓库复制到 Cursor 约定的 skills 目录（以你当前 Cursor 版本说明为准），保证其中有 `SKILL.md`。
+
+在对话里可以：
+
+- 用 **`@`** 引用本仓库的 `SKILL.md`，或  
+- 若你已配置技能别名，使用类似 **`/ziwei-ai-html-report`** 触发（取决于你的规则/技能配置是否绑定了该指令）。
+
+### 2）Claude Code
+
+将本仓库整体复制到 Claude Code 的 **skills 目录**（具体以官方文档为准），例如用户级 `~/.claude/skills/` 或项目内的 `.claude/skills/`，在其中新建一个子文件夹（名称随意，建议与本仓库目录名一致），并保证其中有 **`SKILL.md`**。之后在项目里按该工具的说明加载 skill 即可。
+
+### 3）Codex / 其它 CLI 或 IDE 插件
+
+- 若支持 **skills 目录**：同样在对应位置放入本仓库（含 `SKILL.md`）。  
+- 若暂不支持：**把 `SKILL.md` 的全文或路径提供给对话**，并说明「请严格按该 skill 生成离线 HTML 报告」。
+
+### 你需要保留哪些文件？
+
+最少要保证 AI 能访问：**`SKILL.md`**、**`prompts.md`**、**`report-template.html`**、**`tools/ziwei_offline.py`**（以及 `tools/` 下的数据文件）。本仓库已打包齐全，**整体克隆或复制**最省事。
+
+---
+
+## 怎么用：复制这一段到对话里
+
+把下面整段粘贴到 AI 对话中，**改成你自己的信息**即可。  
+（若你的环境支持，可在段首加上 skill 触发方式，例如 `/ziwei-ai-html-report`。）
+
+```text
+/ziwei-ai-html-report  帮我生成我的紫微斗数 AI 命盘报告
+
+阳历生日: 1995-08-21
+出生时间: 11:40
+性别: 男
+出生地: 广东省深圳市
+流年分析年: 2026
+```
+
+### 字段说明（照抄格式最稳）
+
+| 信息 | 怎么填 |
+|------|--------|
+| 阳历生日 | `YYYY-MM-DD`，例如 `1995-08-21` |
+| 出生时间 | `HH:mm`（24 小时制）；**23:00–23:59** 在本工具里按**晚子时换日**处理 |
+| 性别 | `男` / `女`（或 `male` / `female`） |
+| 出生地 | 建议写到市/区，用于**真太阳时**换算；也可在 skill 说明里改用纯离线或经纬度 |
+| 流年分析年 | 想重点看的公历年份，例如 `2026` |
+
+**支持范围**：阳历 **1900-01-31 至 2100-12-31**。超出范围需换其它工具或自备命盘上下文。
+
+---
+
+## AI 会为你做什么（你只需要知道结果）
+
+1. 用本仓库自带的 **Python 排盘脚本**（无需你会写代码）生成结构化命盘与上下文。  
+2. 按 **`prompts.md`** 写出综合批注、流年等章节。  
+3. 把内容填入 **`report-template.html`**，并嵌入 **K 线数据**（数值由工具生成，有连续性校验）。  
+4. 最终给你 **完整的一个 HTML 文件**：保存为 `.html` 后双击即可在浏览器中阅读。
+
+若某一步信息不足（例如日期超范围），按约定应 **停止编造**，并提示你补资料——这是正常现象。
+
+---
+
+## 可选：不用 AI，只要排盘 JSON（给理工用户）
+
+若你熟悉命令行，本机安装 **Python 3** 后可在仓库根目录执行：
 
 ```bash
 python3 tools/ziwei_offline.py \
@@ -22,97 +98,41 @@ python3 tools/ziwei_offline.py \
   --format json
 ```
 
-运行后会输出：
-- `chart`（结构化命盘）
-- `natalContext`（综合批注输入）
-- `yearlyContext`（流年输入）
-- `klineContext`（K 线输入）
+输出中含命盘结构与生成报告所需的上下文字段。完整 HTML 仍建议走 **Skill + 模板** 流程。
 
-## GitHub 发布版保证
+---
 
-- 本目录可单独复制、克隆、运行，不依赖仓库其它目录。
-- 核心排盘与上下文生成仅依赖 Python 标准库，不依赖 Node、npm、app 运行时或第三方排盘库。
-- 在线地理编码只是增强能力，不是必需前提；坐标失败时会自动回退离线城市表或标准时。
-- 对 Agent 的输入、输出与校验契约以 `SKILL.md`、`prompts.md`、`tools/ziwei_offline.py` 为准。
+## 常见问题
 
-## 标准输入示例
+- **一定要联网吗？**  
+  不必须。联网主要用于出生地地理编码；失败会回退内置城市表或标准时，详见 `SKILL.md`。
+- **和某 App 排盘是否每个字都一样？**  
+  本仓库默认是**中州派口径**的离线实现；若要与某 App **星曜完全一致**，`SKILL.md` 中说明了可选的 iztro（Node）路径。
+- **报告里的 K 线是预测吗？**  
+  不是。K 线为基于命盘语义的**示意曲线**，模板内亦有说明。
 
-展示层（给终端用户）：
-- 阳历生日：1996年1月6日
-- 农历生日：可不填（自动计算）
-- 出生时间：11:30
-- 性别：女
-- 出生地：广东省佛山市顺德区
+---
 
-机器层（给脚本或 Agent）：
-- `solar=1996-01-06`
-- `time=11:30`（或 `hour=11`）
-- `gender=female`
-- `birthplace=广东省佛山市顺德区`
-- `target-year=2026`（可选）
+## 开发者与仓库信息
 
-## Agent 通用契约
+- 规则与契约：**[SKILL.md](./SKILL.md)**、**[prompts.md](./prompts.md)**  
+- 历法与派别说明：**[docs/rules-baseline.md](./docs/rules-baseline.md)**  
+- 运行测试：`python3 -m unittest discover -s tests -p "test_*.py"`  
+- 许可证：**[LICENSE](./LICENSE)**
 
-- **输入契约**：出生资料或已存在上下文（二选一）。
-- **生成契约**：任意模型可用，但需遵守 `prompts.md` 的格式约束。
-- **交付契约**：最终应产出单文件 HTML，且保留免责声明与 K 线校验规则。
-- **失败契约**：输入越界、上下文不完整、K 线校验失败时必须停止断语或停止交付，不得脑补星曜事实。
+本仓库可 **单独克隆使用**，不依赖其它项目目录。
 
-### 对话式 Agent 兼容声明
+---
 
-本项目为 **agent-agnostic 协议**，支持在 Codex、Claude Code、Minimax 等对话式 Agent 中完成端到端报告生成。
+## GitHub 发布版保证（给集成者与 Agent）
 
-- 可实现能力：通过对话生成 `natalContext/yearlyContext/klineContext`，并组装最终单文件 HTML 报告。
-- 成功前提：目标 Agent 需严格遵守本目录的输入/输出契约与校验要求。
-- 影响因素：具体成功率取决于 Agent 的指令遵循能力、上下文窗口与运行环境（如网络地理编码可用性）。
-- 稳定性建议：优先使用本仓库提供的标准输入示例与 `examples/` 模板，降低格式偏差。
-
-推荐阅读顺序：
-1. `SKILL.md`
-2. `prompts.md`
-3. `report-template.html`
-
-## 开发者入口
-
-- 规则基线：`docs/rules-baseline.md`
-- 规则映射：`RULE_MATRIX.md`
-- 核心引擎：`tools/ziwei_offline.py`
-- 语义数据：`tools/knowledge_semantics.json`
-- 地理回退：`tools/cn_locations.json`
-- 测试：`tests/test_ziwei_offline.py`
-- 发布配套：`LICENSE`、`.github/workflows/ci.yml`、`RELEASE_CHECKLIST.md`
-
-运行测试：
-
-```bash
-python3 -m unittest discover -s tests -p "test_*.py"
-```
-
-## 真太阳时口径
-
-- 固定 UTC+8，不回溯历史夏令时。
-- 公式：`标准时 + (经度-120)*4 分钟 + 时间方程`。
-- 地理编码模式：`hybrid`（在线优先，失败回退 `tools/cn_locations.json`）。
-- 若无可用经纬度，会回退标准时并在输出中标注。
-
-### 推荐运行模式
-
-- 默认混合模式：`python3 tools/ziwei_offline.py --solar 1996-01-06 --time 11:30 --gender female --birthplace "广东省佛山市顺德区" --target-year 2026 --format json`
-- 纯离线模式：在默认命令后追加 `--geocode-mode offline`
-- 手工坐标模式：用 `--longitude 113.2932 --latitude 22.8054` 替代 `--birthplace`
-- 禁用真太阳时：追加 `--disable-true-solar-time`
+- 本仓库可单独克隆、复制、运行，不依赖其它私有目录。
+- 核心排盘与上下文生成仅需 **Python 3 标准库**（完整 HTML 报告仍需按 `SKILL.md` 组装模板与提示词）。
+- **失败契约**：输入越界、上下文不完整、或 K 线数据未通过校验时，应停止杜撰星曜落宫，并提示用户补资料或修正数据。
 
 ## 常见失败与排查
 
-- `日期格式必须为 YYYY-MM-DD`：检查 `--solar` 是否是 ISO 日期。
-- `time 格式必须为 HH:mm`：检查 `--time` 是否补零且范围合法。
-- `必须提供 --time 或 --hour`：二者至少提供一个，`--time` 优先。
-- 出生地无法解析：改用 `--geocode-mode offline`，或直接传 `--longitude/--latitude`。
-- 日期超出 1900-01-31 至 2100-12-31：本发布版不会继续断语，需补充上下文或改用其它口径。
-
-## 示例文件
-
-- `examples/input.standard.json`：标准输入 JSON
-- `examples/context.sample.md`：上下文输入样例
-- `examples/quickstart.sh`：一键演示脚本
-- `examples/output.sample.json`：输出结构样例
+- **日期格式**：须为 `YYYY-MM-DD`。
+- **时间**：推荐 `HH:mm`；须提供 `--time` 或 `--hour`（命令行场景）。
+- **出生地无法解析**：可在 `SKILL.md` 中查阅 `--geocode-mode offline` 或 `--longitude/--latitude`。**对话场景**下可让 AI 按 skill 中的回退规则处理。
+- **日期超出 1900-01-31～2100-12-31**：当前离线历法不覆盖，请勿强行让 AI 编造命盘。
