@@ -75,10 +75,10 @@
 
 ## AI 会为你做什么（你只需要知道结果）
 
-1. 用本仓库自带的 **Python 排盘脚本**（无需你会写代码）生成结构化命盘与上下文。  
-2. 按 **`prompts.md`** 写出综合批注、流年等章节。  
-3. 把内容填入 **`report-template.html`**，并嵌入 **K 线数据**（数值由工具生成，有连续性校验）。  
-4. 最终给你 **完整的一个 HTML 文件**：保存为 `.html` 后双击即可在浏览器中阅读。
+1. 用本仓库自带的 **Python 排盘脚本**（无需你会写代码）生成结构化命盘、`klineData` 与提示词上下文。  
+2. 用 `tools/render_prompts.py` 渲染综合批注、流年与 K 线文字补充提示词，生成 `prompt-manifest.json`。  
+3. 模型只写综合/流年正文与可选 `kline-brief.json`；K 线 `open/high/low/close` 始终来自工具生成的 `klineData`。  
+4. 用 `tools/generate_report.py` 填入 **`report-template.html`**，通过校验后输出完整 HTML 文件。
 
 若某一步信息不足（例如日期超范围），按约定应 **停止编造**，并提示你补资料——这是正常现象。
 
@@ -98,7 +98,36 @@ python3 tools/ziwei_offline.py \
   --format json
 ```
 
-输出中含命盘结构与生成报告所需的上下文字段。完整 HTML 仍建议走 **Skill + 模板** 流程。
+输出中含命盘结构与生成报告所需字段：`natalContext`、`yearlyContext`、`klineContext`、`klineData`。完整 HTML 仍建议走 **Skill + 模板** 流程。
+
+### 可选：标准 Agent 工作流
+
+```bash
+python3 tools/ziwei_offline.py \
+  --solar 1996-01-06 \
+  --time 11:30 \
+  --gender female \
+  --birthplace "广东省佛山市顺德区" \
+  --target-year 2026 \
+  --format json > work/payload.json
+
+python3 tools/render_prompts.py \
+  --payload-json work/payload.json \
+  --out-dir work \
+  --work-root work
+
+# 按 work/prompt-manifest.json 调用模型，生成：
+# - work/natal.html
+# - work/yearly.html
+# - work/kline-brief.json（可选，只含 age/brief/reason）
+
+python3 tools/generate_report.py \
+  --payload-json work/payload.json \
+  --natal-html work/natal.html \
+  --yearly-html work/yearly.html \
+  --kline-brief-json work/kline-brief.json \
+  -o work/report.html
+```
 
 ---
 
@@ -127,7 +156,7 @@ python3 tools/ziwei_offline.py \
 ## GitHub 发布版保证（给集成者与 Agent）
 
 - 本仓库可单独克隆、复制、运行，不依赖其它私有目录。
-- 核心排盘与上下文生成仅需 **Python 3 标准库**（完整 HTML 报告仍需按 `SKILL.md` 组装模板与提示词）。
+- 核心排盘、提示词渲染、HTML 组装与校验仅需 **Python 3 标准库**；iztro 仅用于可选对齐路径。
 - **失败契约**：输入越界、上下文不完整、或 K 线数据未通过校验时，应停止杜撰星曜落宫，并提示用户补资料或修正数据。
 
 ## 常见失败与排查

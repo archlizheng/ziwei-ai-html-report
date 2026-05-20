@@ -168,18 +168,19 @@ python3 tools/ziwei_offline.py \
 ## 执行步骤（agent）
 
 1. **校验输入**：若有出生资料，先运行 `tools/ziwei_offline.py` 生成 JSON；若已有上下文，确认存在 `natalContext` 等价文本与 `yearlyContext`。
-2. **排盘自检**：确认 JSON 含 `chart.palaces` 12 宫、`fiveElementsClass`、`natalContext`、`yearlyContext`、`klineContext`。
-3. **综合批注**：system + user 按 [prompts.md](prompts.md) 第 1 节；用户消息使用 `natalContext`。  
-   - 生成“完整版”文案，严格遵循章节与详尽度约束。
-4. **流年**：按第 2 节，将分析年份写入用户消息；用户消息使用 `natalContext` + `yearlyContext`；输出 `## [年份] 岁次流年运程` 结构。  
-   - 生成“完整版”流年文案，严格遵循章节与详尽度约束。
-5. **K 线**：优先使用离线工具输出的 `klineData`；如需文字说明，可按第 3 节让模型补充 `brief/reason`，但不得覆盖工具生成的 `open/high/low/close`。
+2. **排盘自检**：确认 JSON 含 `chart.palaces` 12 宫、`fiveElementsClass`、`natalContext`、`yearlyContext`、`klineContext`、`klineData`。
+3. **渲染提示词（推荐）**：运行 `tools/render_prompts.py --payload-json payload.json --out-dir work --work-root work`，读取 `prompt-manifest.json`；**勿手抄** [prompts.md](prompts.md)，以渲染文件为唯一注入来源。
+4. **模型生成产物**：
+   - `natal.html`：用 `prompts/natal.system.md` + `natal.user.md`；
+   - `yearly.html`：用 `yearly.system.md` + `yearly.user.md`；
+   - `kline-brief.json`：用 `kline.system.md` + `kline.user.md`，仅可返回 `age/brief/reason`，不得返回或改写 `open/high/low/close`。
+5. **K 线**：数值必须使用离线工具输出的 `klineData`；如需文字说明，只能将模型生成的 `brief/reason` 合并到对应年龄。
 6. **K 线自检**（修正前不得写入 HTML）：
    - 恰 **100** 条，`age` 为 1–100 各出现一次；
    - `age===1` 时 `open === 50`；
    - 对 `age>1`：`open` 与上一条 `close` 在数值上一致（容差 1e-6，或两位小数相等）；
    - `high >= max(open,close)`，`low <= min(open,close)`，且所有数值 ∈ [0,100]。
-7. **组装 HTML**：以 [report-template.html](report-template.html) 为壳；**页面自上而下顺序固定**（不得调换）：**紫微排盘图** → **紫微命盘综合批注** → **流年运势** → **人生运势 K 线** → **数据完整性状态**。将命盘 JSON 填入 `script#chart-data`（供排盘图渲染），将综合/流年正文填入对应 `#content-*`；将 K 线 JSON 嵌入 `script#kline-data`；页脚保留与提示词等价的**免责声明**（综合 + 流年 + K 线均为参考性质）。
+7. **组装 HTML**：使用 `tools/generate_report.py` 与 [report-template.html](report-template.html) 组装；正式交付禁止 `--skip-validation`。页面顺序固定：**紫微排盘图** → **紫微命盘综合批注** → **流年运势** → **人生运势 K 线** → **数据完整性状态**。将命盘 JSON 填入 `script#chart-data`，将综合/流年正文填入对应 `#content-*`，将合并后的 K 线 JSON 嵌入 `script#kline-data`；页脚保留与提示词等价的**免责声明**。
 8. **输出**：向用户交付**完整** `<!DOCTYPE html>` 文档（可复制为 `.html` 文件后直接双击打开）。
 
 ## 运行模式
@@ -187,8 +188,8 @@ python3 tools/ziwei_offline.py \
 ### 模式 A：模型增强（推荐）
 
 - 使用离线工具得到 `natalContext/yearlyContext/klineData/klineContext`；
-- 将 `prompts.md` 的 system+user 发送给当前 agent 已接入模型；
-- 得到综合批注与流年正文后写入 HTML；
+- 用 `render_prompts.py` 生成 prompt 文件与 `prompt-manifest.json`；
+- 得到综合批注、流年正文与可选 `kline-brief.json` 后，用 `generate_report.py` 组装 HTML；
 - K 线数值由工具生成并通过强校验；模型只可补充文字，不可改变走势数值。
 
 ## Quick Reference

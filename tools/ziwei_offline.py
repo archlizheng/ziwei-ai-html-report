@@ -1056,7 +1056,8 @@ def build_yearly_context(chart: Dict[str, Any], target_year: int) -> str:
 
 def build_kline_context(chart: Dict[str, Any]) -> str:
     lines = [
-        "请根据以下命盘信息，生成 1-100 岁的人生 K 线数据。",
+        "请根据以下命盘信息，为已由离线工具确定的 1-100 岁人生 K 线补充 brief 文案。",
+        "注意：数值走势来自 payload.klineData；不得返回或改写 open、close、high、low。",
         "",
         "## 基本信息",
         f"- 出生年份: {chart['lunar']['year']}年",
@@ -1079,7 +1080,7 @@ def build_kline_context(chart: Dict[str, Any]) -> str:
         data = build_yearly_data(chart, year)
         lines.append(f"{year}年({data['stem']}{data['branch']}) 四化:{'、'.join(data['mutagens'])} 命宫:{data['palaceName']}")
     lines.append("")
-    lines.append("请生成 100 年的 K 线数据 JSON。")
+    lines.append("请生成 100 年的 K 线 brief JSON；每条仅包含 age 与 brief，可选 reason，不得包含 open、close、high、low。")
     return "\n".join(lines)
 
 
