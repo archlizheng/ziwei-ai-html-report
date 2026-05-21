@@ -1,5 +1,6 @@
 import json
 import pathlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -9,6 +10,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import generate_report as gr  # noqa: E402
+import render_prompts as rp  # noqa: E402
 import report_validators as rv  # noqa: E402
 import ziwei_offline as zw  # noqa: E402
 
@@ -177,6 +179,171 @@ class ReportGenerationTests(unittest.TestCase):
             )
             self.assertEqual(proc.returncode, 2)
             self.assertIn("100", proc.stderr)
+
+
+class DangerousHtmlValidatorTests(unittest.TestCase):
+    def setUp(self):
+        self.chart = zw.generate_chart(
+            1996, 1, 6, 11, "female", 2026, minute=30, use_true_solar_time=False
+        )
+        self.natal_html = _make_natal_html(self.chart)
+        self.yearly_html = _make_yearly_html(self.chart, 2026)
+        self.kline = zw.build_payload(self.chart, 2026)["klineData"]
+
+    def test_rejects_script_tag_in_natal_fragment(self):
+        bad = self.natal_html + '<script>alert(1)</script>'
+        ok, msg = rv.validate_safe_html_fragment(bad, label="综合批注")
+        self.assertFalse(ok)
+        self.assertIn("<script>", msg)
+
+    def test_rejects_event_handler_in_yearly_fragment(self):
+        bad = '<img src="x" onerror="alert(1)">' + self.yearly_html
+        ok, msg = rv.validate_safe_html_fragment(bad, label="流年报告")
+        self.assertFalse(ok)
+        self.assertIn("事件属性", msg)
+
+    def test_rejects_javascript_url_in_fragment(self):
+        bad = self.natal_html + '<a href="javascript:alert(1)">x</a>'
+        ok, msg = rv.validate_safe_html_fragment(bad, label="综合批注")
+        self.assertFalse(ok)
+        self.assertIn("javascript:", msg)
+
+    def test_report_inputs_reject_dangerous_natal_html(self):
+        bad = self.natal_html + "<script></script>"
+        ok, errors = rv.validate_report_inputs(
+            chart=self.chart,
+            natal_html=bad,
+            yearly_html=self.yearly_html,
+            kline_rows=self.kline,
+        )
+        self.assertFalse(ok)
+        self.assertTrue(any("综合批注" in e and "<script>" in e for e in errors))
+
+    def test_assembled_html_rejects_external_script_src(self):
+        template = (ROOT / "report-template.html").read_text(encoding="utf-8")
+        html = gr.assemble_report(
+            template, self.chart, 2026, self.natal_html, self.yearly_html, self.kline
+        )
+        injected = html.replace(
+            "</body>",
+            '<script src="https://evil.example/x.js"></script></body>',
+            1,
+        )
+        ok, msg = rv.validate_html_delivery(injected)
+        self.assertFalse(ok)
+        self.assertIn("外链脚本", msg)
+
+    def test_valid_fragments_pass_safe_html_check(self):
+        for fragment, label in (
+            (self.natal_html, "综合批注"),
+            (self.yearly_html, "流年报告"),
+        ):
+            ok, msg = rv.validate_safe_html_fragment(fragment, label=label)
+            self.assertTrue(ok, msg=msg)
+
+
+class EndToEndReportWorkflowTests(unittest.TestCase):
+    def setUp(self):
+        self.chart = zw.generate_chart(
+            1996, 1, 6, 11, "female", 2026, minute=30, use_true_solar_time=False
+        )
+        self.payload = zw.build_payload(self.chart, 2026)
+        self.natal_html = _make_natal_html(self.chart)
+        self.yearly_html = _make_yearly_html(self.chart, 2026)
+
+    def test_payload_render_generate_pipeline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            work = pathlib.Path(tmp)
+            payload_path = work / "payload.json"
+            payload_path.write_text(
+                json.dumps(self.payload, ensure_ascii=False), encoding="utf-8"
+            )
+
+            rp.render_all_prompts(self.payload, work, work_root=work)
+            self.assertTrue((work / "prompt-manifest.json").exists())
+            self.assertTrue((work / "prompts" / "natal.system.md").exists())
+
+            (work / "natal.html").write_text(self.natal_html, encoding="utf-8")
+            (work / "yearly.html").write_text(self.yearly_html, encoding="utf-8")
+            (work / "kline-brief.json").write_text(
+                json.dumps([{"age": 1, "brief": "平稳起步"}], ensure_ascii=False),
+                encoding="utf-8",
+            )
+            out = work / "report.html"
+
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "tools" / "generate_report.py"),
+                    "--payload-json",
+                    str(payload_path),
+                    "--natal-html",
+                    str(work / "natal.html"),
+                    "--yearly-html",
+                    str(work / "yearly.html"),
+                    "--kline-brief-json",
+                    str(work / "kline-brief.json"),
+                    "-o",
+                    str(out),
+                ],
+                text=True,
+                capture_output=True,
+                cwd=ROOT,
+            )
+            self.assertEqual(proc.returncode, 0, msg=proc.stderr)
+
+            html = out.read_text(encoding="utf-8")
+            self.assertIn("<!DOCTYPE html>", html)
+            self.assertIn('id="content-natal"', html)
+            self.assertIn('id="content-yearly"', html)
+            self.assertIn('id="chart-data"', html)
+            self.assertIn('id="kline-data"', html)
+            self.assertIn("壹·", html)
+            self.assertIn('"brief":"平稳起步"', html)
+            self.assertIn('"open":50.0', html)
+
+            delivery_ok, delivery_msg = rv.validate_html_delivery(html)
+            self.assertTrue(delivery_ok, msg=delivery_msg)
+
+            natal_block = re.search(
+                r'id="content-natal"[^>]*>([\s\S]*?)</div>',
+                html,
+            )
+            yearly_block = re.search(
+                r'id="content-yearly"[^>]*>([\s\S]*?)</div>',
+                html,
+            )
+            self.assertIsNotNone(natal_block)
+            self.assertIsNotNone(yearly_block)
+            for block in (natal_block.group(1), yearly_block.group(1)):
+                self.assertNotRegex(block, r"请填入|\{\{[A-Z_]+\}\}")
+
+            chart_match = re.search(
+                r'<script type="application/json" id="chart-data">(.*?)</script>',
+                html,
+                re.DOTALL,
+            )
+            kline_match = re.search(
+                r'<script type="application/json" id="kline-data">(.*?)</script>',
+                html,
+                re.DOTALL,
+            )
+            self.assertIsNotNone(chart_match)
+            self.assertIsNotNone(kline_match)
+            chart_data = json.loads(chart_match.group(1))
+            kline_data = json.loads(kline_match.group(1))
+            self.assertEqual(len(chart_data["palaces"]), 12)
+            self.assertEqual(len(kline_data), 100)
+            self.assertEqual(kline_data[0]["brief"], "平稳起步")
+
+            ok, errors = rv.validate_report_inputs(
+                chart=self.chart,
+                natal_html=self.natal_html,
+                yearly_html=self.yearly_html,
+                kline_rows=kline_data,
+                assembled_html=html,
+            )
+            self.assertTrue(ok, msg=errors)
 
 
 if __name__ == "__main__":

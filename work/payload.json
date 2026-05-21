@@ -1,0 +1,2776 @@
+{
+  "chart": {
+    "engine": "ziwei-ai-html-report offline-python",
+    "calendarRange": "1900-2100",
+    "birth": {
+      "solar": "1995-08-21",
+      "effectiveSolar": "1995-08-21",
+      "hour": 11,
+      "minute": 40,
+      "localTime": "11:40",
+      "timeBranch": "午",
+      "lateZi": false,
+      "gender": "male",
+      "birthplace": "广东省深圳市",
+      "coordinates": {
+        "longitude": 114.0579,
+        "latitude": 22.5431,
+        "source": "offline"
+      },
+      "trueSolar": {
+        "enabled": true,
+        "applied": true,
+        "time": "1995-08-21 11:13",
+        "longitudeCorrectionMinutes": -23.768,
+        "equationOfTimeMinutes": -2.69,
+        "totalCorrectionMinutes": -26.459,
+        "fallbackUsed": true,
+        "note": ""
+      }
+    },
+    "lunar": {
+      "year": 1995,
+      "month": 7,
+      "day": 26,
+      "isLeapMonth": false
+    },
+    "yearGanZhi": {
+      "stem": "乙",
+      "branch": "亥",
+      "text": "乙亥"
+    },
+    "fiveElementsClass": "土5局",
+    "fiveElementsNumber": 5,
+    "lifePalace": {
+      "name": "命宫",
+      "branch": "寅",
+      "stem": "戊"
+    },
+    "bodyPalace": {
+      "name": "命宫",
+      "branch": "寅",
+      "stem": "戊"
+    },
+    "palaces": [
+      {
+        "name": "命宫",
+        "branch": "寅",
+        "stem": "戊",
+        "majorStars": [],
+        "minorStars": [
+          {
+            "name": "陀罗"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": true,
+        "isBodyPalace": true,
+        "decadalRange": "5-14"
+      },
+      {
+        "name": "兄弟宫",
+        "branch": "丑",
+        "stem": "己",
+        "majorStars": [],
+        "minorStars": [],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "15-24"
+      },
+      {
+        "name": "夫妻宫",
+        "branch": "子",
+        "stem": "戊",
+        "majorStars": [],
+        "minorStars": [
+          {
+            "name": "天魁"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "25-34"
+      },
+      {
+        "name": "子女宫",
+        "branch": "亥",
+        "stem": "丁",
+        "majorStars": [
+          {
+            "name": "紫微",
+            "description": "帝座之星，主尊贵、统御、格局。",
+            "mutagen": "化科"
+          },
+          {
+            "name": "七杀",
+            "description": "将星，主开创、决断、波折。"
+          }
+        ],
+        "minorStars": [],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "35-44"
+      },
+      {
+        "name": "财帛宫",
+        "branch": "戌",
+        "stem": "丙",
+        "majorStars": [
+          {
+            "name": "天机",
+            "description": "谋略之星，主机变、思虑、技术。",
+            "mutagen": "化禄"
+          },
+          {
+            "name": "天梁",
+            "description": "荫寿之星，主护持、原则、长辈缘。",
+            "mutagen": "化权"
+          }
+        ],
+        "minorStars": [
+          {
+            "name": "左辅"
+          },
+          {
+            "name": "文曲"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "45-54"
+      },
+      {
+        "name": "疾厄宫",
+        "branch": "酉",
+        "stem": "乙",
+        "majorStars": [
+          {
+            "name": "天相",
+            "description": "印绶之星，主辅佐、制度、体面。"
+          }
+        ],
+        "minorStars": [],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "55-64"
+      },
+      {
+        "name": "迁移宫",
+        "branch": "申",
+        "stem": "甲",
+        "majorStars": [
+          {
+            "name": "太阳",
+            "description": "光明之星，主名望、外显、助人。"
+          },
+          {
+            "name": "巨门",
+            "description": "口舌暗曜，主表达、疑虑、是非。"
+          }
+        ],
+        "minorStars": [
+          {
+            "name": "天钺"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "65-74"
+      },
+      {
+        "name": "交友宫",
+        "branch": "未",
+        "stem": "癸",
+        "majorStars": [
+          {
+            "name": "武曲",
+            "description": "财帛之星，主执行、理财、刚毅。"
+          },
+          {
+            "name": "贪狼",
+            "description": "桃花才艺之星，主欲望、交际、才华。"
+          }
+        ],
+        "minorStars": [],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "75-84"
+      },
+      {
+        "name": "官禄宫",
+        "branch": "午",
+        "stem": "壬",
+        "majorStars": [
+          {
+            "name": "天同",
+            "description": "福德之星，主温和、享受、人缘。"
+          },
+          {
+            "name": "太阴",
+            "description": "阴柔之星，主财富、情感、细腻。",
+            "mutagen": "化忌"
+          }
+        ],
+        "minorStars": [],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "85-94"
+      },
+      {
+        "name": "田宅宫",
+        "branch": "巳",
+        "stem": "辛",
+        "majorStars": [
+          {
+            "name": "天府",
+            "description": "库藏之星，主稳重、资源、包容。"
+          }
+        ],
+        "minorStars": [
+          {
+            "name": "地劫"
+          },
+          {
+            "name": "地空"
+          },
+          {
+            "name": "天马"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "95-104"
+      },
+      {
+        "name": "福德宫",
+        "branch": "辰",
+        "stem": "庚",
+        "majorStars": [],
+        "minorStars": [
+          {
+            "name": "右弼"
+          },
+          {
+            "name": "文昌"
+          },
+          {
+            "name": "擎羊"
+          },
+          {
+            "name": "铃星"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "105-114"
+      },
+      {
+        "name": "父母宫",
+        "branch": "卯",
+        "stem": "己",
+        "majorStars": [
+          {
+            "name": "廉贞",
+            "description": "囚杀之星，主原则、欲望、变化。"
+          },
+          {
+            "name": "破军",
+            "description": "耗星，主破旧立新、变革、起伏。"
+          }
+        ],
+        "minorStars": [
+          {
+            "name": "禄存"
+          },
+          {
+            "name": "火星"
+          }
+        ],
+        "adjectiveStars": [],
+        "isLifePalace": false,
+        "isBodyPalace": false,
+        "decadalRange": "115-124"
+      }
+    ],
+    "natalMutagens": [
+      {
+        "star": "紫微",
+        "sihua": "化科",
+        "palace": "子女宫"
+      },
+      {
+        "star": "天机",
+        "sihua": "化禄",
+        "palace": "财帛宫"
+      },
+      {
+        "star": "天梁",
+        "sihua": "化权",
+        "palace": "财帛宫"
+      },
+      {
+        "star": "太阴",
+        "sihua": "化忌",
+        "palace": "官禄宫"
+      }
+    ],
+    "patterns": [
+      "机月同梁倾向：适合制度型、文教策划或服务协同场景。（来源：docs/rules-baseline.md#3. 语义与输出要点）",
+      "命宫无主星：需重视对宫与三方四正，人生变化性较强。"
+    ],
+    "yearly": {
+      "year": 2026,
+      "stem": "丙",
+      "branch": "午",
+      "mutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ],
+      "palaceName": "官禄宫",
+      "palaceBranch": "午",
+      "currentDecadal": {
+        "age": 32,
+        "nominalAge": 32,
+        "actualAgeAtYearEnd": 31,
+        "actualAgeAtReference": 30,
+        "referenceDate": "2026-05-21",
+        "targetYear": 2026,
+        "lunarBirthYear": 1995,
+        "palaceName": "夫妻宫",
+        "branch": "子",
+        "stem": "戊",
+        "mutagens": [
+          "贪狼化禄",
+          "太阴化权",
+          "右弼化科",
+          "天机化忌"
+        ]
+      }
+    }
+  },
+  "ageInfo": {
+    "nominalAge": 32,
+    "actualAgeAtYearEnd": 31,
+    "actualAgeAtReference": 30,
+    "referenceDate": "2026-05-21",
+    "targetYear": 2026,
+    "lunarBirthYear": 1995
+  },
+  "natalContext": "【命盘完整信息】\n\n## 时间修正信息\n- 出生地：广东省深圳市\n- 标准时间：1995-08-21 11:40\n- 真太阳时：1995-08-21 11:13\n- 修正分钟：-26.459（经度-23.768 + 时间方程-2.69）\n- 时辰归属：午时\n\n## 身宫位置\n- 身宫在命宫（寅宫）\n\n（身宫无主星，借对宫参考）\n\n## 十二宫星曜分布\n\n（主星结构化释义见上文「命宫主星」「身宫位置」；本节为十二宫落宫与星曜组合事实。）\n\n### 命宫【身宫】 (寅宫，大限5-14岁)\n- 宫干：戊\n- 宫位要点：主先天性情与人生底盘。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：无主星（借对宫星曜）\n- 辅星：陀罗\n\n### 兄弟宫 (丑宫，大限15-24岁)\n- 宫干：己\n- 宫位要点：主手足缘分与同辈协作关系。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：无主星（借对宫星曜）\n\n### 夫妻宫 (子宫，大限25-34岁)\n- 宫干：戊\n- 宫位要点：主伴侣关系与长期亲密模式。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：无主星（借对宫星曜）\n- 辅星：天魁\n\n### 子女宫 (亥宫，大限35-44岁)\n- 宫干：丁\n- 宫位要点：主子女缘与创造表达。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：紫微[化科]、七杀\n\n### 财帛宫 (戌宫，大限45-54岁)\n- 宫干：丙\n- 宫位要点：主财务结构、进财路径与破耗风险。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：天机[化禄]、天梁[化权]\n- 辅星：左辅、文曲\n\n### 疾厄宫 (酉宫，大限55-64岁)\n- 宫干：乙\n- 宫位要点：主体质弱项与健康课题。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：天相\n\n### 迁移宫 (申宫，大限65-74岁)\n- 宫干：甲\n- 宫位要点：主外出发展、跨地域机缘与风险。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：太阳、巨门\n- 辅星：天钺\n\n### 交友宫 (未宫，大限75-84岁)\n- 宫干：癸\n- 宫位要点：主人脉结构、团队协作与口舌是非。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：武曲、贪狼\n\n### 官禄宫 (午宫，大限85-94岁)\n- 宫干：壬\n- 宫位要点：主职业赛道、组织角色与事业上限。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：天同、太阴[化忌]\n\n### 田宅宫 (巳宫，大限95-104岁)\n- 宫干：辛\n- 宫位要点：主居住资产、家庭环境与稳定度。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：天府\n- 辅星：地劫、地空、天马\n\n### 福德宫 (辰宫，大限105-114岁)\n- 宫干：庚\n- 宫位要点：主精神状态、福分承压与内在满足。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：无主星（借对宫星曜）\n- 辅星：右弼、文昌、擎羊、铃星\n\n### 父母宫 (卯宫，大限115-124岁)\n- 宫干：己\n- 宫位要点：主长辈缘分、原生支持与权威互动。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 主星：廉贞、破军\n- 辅星：禄存、火星\n\n## 本命四化分布\n- 紫微化科入子女宫\n- 天机化禄入财帛宫\n- 天梁化权入财帛宫\n- 太阴化忌入官禄宫\n\n## 十二大限\n（每个大限10年，按五行局起运年龄与阴阳男女顺逆行排布）\n\n### 5-14岁：命宫\n- 大限天干：戊\n- 大限四化：贪狼化禄、太阴化权、右弼化科、天机化忌\n\n### 15-24岁：兄弟宫\n- 大限天干：己\n- 大限四化：武曲化禄、贪狼化权、天梁化科、文曲化忌\n\n### 25-34岁：夫妻宫\n- 大限天干：戊\n- 大限四化：贪狼化禄、太阴化权、右弼化科、天机化忌\n\n### 35-44岁：子女宫\n- 大限天干：丁\n- 大限四化：太阴化禄、天同化权、天机化科、巨门化忌\n\n### 45-54岁：财帛宫\n- 大限天干：丙\n- 大限四化：天同化禄、天机化权、文昌化科、廉贞化忌\n\n### 55-64岁：疾厄宫\n- 大限天干：乙\n- 大限四化：天机化禄、天梁化权、紫微化科、太阴化忌\n\n### 65-74岁：迁移宫\n- 大限天干：甲\n- 大限四化：廉贞化禄、破军化权、武曲化科、太阳化忌\n\n### 75-84岁：交友宫\n- 大限天干：癸\n- 大限四化：破军化禄、巨门化权、太阴化科、贪狼化忌\n\n### 85-94岁：官禄宫\n- 大限天干：壬\n- 大限四化：天梁化禄、紫微化权、左辅化科、武曲化忌\n\n### 95-104岁：田宅宫\n- 大限天干：辛\n- 大限四化：巨门化禄、太阳化权、文曲化科、文昌化忌\n\n### 105-114岁：福德宫\n- 大限天干：庚\n- 大限四化：太阳化禄、武曲化权、太阴化科、天同化忌\n\n### 115-124岁：父母宫\n- 大限天干：己\n- 大限四化：武曲化禄、贪狼化权、天梁化科、文曲化忌\n\n## 近年流年信息\n\n- 2021年（辛丑）：流年命宫在兄弟宫，四化：巨门化禄、太阳化权、文曲化科、文昌化忌\n- 2022年（壬寅）：流年命宫在命宫，四化：天梁化禄、紫微化权、左辅化科、武曲化忌\n- 2023年（癸卯）：流年命宫在父母宫，四化：破军化禄、巨门化权、太阴化科、贪狼化忌\n- 2024年（甲辰）：流年命宫在福德宫，四化：廉贞化禄、破军化权、武曲化科、太阳化忌\n- 2025年（乙巳）：流年命宫在田宅宫，四化：天机化禄、天梁化权、紫微化科、太阴化忌\n- 2026年（丙午）：流年命宫在官禄宫，四化：天同化禄、天机化权、文昌化科、廉贞化忌\n- 2027年（丁未）：流年命宫在交友宫，四化：太阴化禄、天同化权、天机化科、巨门化忌\n- 2028年（戊申）：流年命宫在迁移宫，四化：贪狼化禄、太阴化权、右弼化科、天机化忌\n- 2029年（己酉）：流年命宫在疾厄宫，四化：武曲化禄、贪狼化权、天梁化科、文曲化忌\n- 2030年（庚戌）：流年命宫在财帛宫，四化：太阳化禄、武曲化权、太阴化科、天同化忌\n- 2031年（辛亥）：流年命宫在子女宫，四化：巨门化禄、太阳化权、文曲化科、文昌化忌\n\n## 格局提示\n- 机月同梁倾向：适合制度型、文教策划或服务协同场景。（来源：docs/rules-baseline.md#3. 语义与输出要点）\n- 命宫无主星：需重视对宫与三方四正，人生变化性较强。\n",
+  "yearlyContext": "【流年盘信息】\n\n## 流年基础\n- 时间口径：真太阳时（1995-08-21 11:13）\n- 流年：2026年（丙午年）\n- 流年四化：天同化禄、天机化权、文昌化科、廉贞化忌\n- 流年命宫位置：官禄宫（午宫）\n\n## 当前大限\n- 当前虚岁：32岁（大限、流年叠宫口径）\n- 当前周岁：截至2026-12-31 为 31 岁\n- 周岁（截至2026-05-21）：30 岁\n- 大限天干：戊\n- 大限四化：贪狼化禄、太阴化权、右弼化科、天机化忌\n- 大限命宫位置：夫妻宫（子宫）\n\n## 流年重点宫位星曜\n### 命宫\n- 主星：无主星\n- 辅星：陀罗\n\n### 财帛宫\n- 主星：天机[化禄]、天梁[化权]\n- 辅星：左辅、文曲\n\n### 官禄宫\n- 主星：天同、太阴[化忌]\n\n### 夫妻宫\n- 主星：无主星\n- 辅星：天魁\n\n### 疾厄宫\n- 主星：天相\n\n### 迁移宫\n- 主星：太阳、巨门\n- 辅星：天钺\n",
+  "klineContext": "请根据以下命盘信息，为已由离线工具确定的 1-100 岁人生 K 线补充 brief 文案。\n注意：数值走势来自 payload.klineData；不得返回或改写 open、close、high、low。\n\n## 基本信息\n- 出生年份: 1995年\n- 命宫主星: 无主星\n- 身宫位置: 命宫\n- 身宫主星: 无主星\n\n## 本命四化\n紫微化科 → 子女宫、天机化禄 → 财帛宫、天梁化权 → 财帛宫、太阴化忌 → 官禄宫\n\n## 十二宫配置\n命宫(戊寅): 无主星 | 陀罗\n兄弟宫(己丑): 无主星\n夫妻宫(戊子): 无主星 | 天魁\n子女宫(丁亥): 紫微[化科]、七杀\n财帛宫(丙戌): 天机[化禄]、天梁[化权] | 左辅、文曲\n疾厄宫(乙酉): 天相\n迁移宫(甲申): 太阳、巨门 | 天钺\n交友宫(癸未): 武曲、贪狼\n官禄宫(壬午): 天同、太阴[化忌]\n田宅宫(辛巳): 天府 | 地劫、地空、天马\n福德宫(庚辰): 无主星 | 右弼、文昌、擎羊、铃星\n父母宫(己卯): 廉贞、破军 | 禄存、火星\n\n## 大限走向\n5-14岁 → 命宫(戊) 四化:贪狼化禄、太阴化权、右弼化科、天机化忌\n15-24岁 → 兄弟宫(己) 四化:武曲化禄、贪狼化权、天梁化科、文曲化忌\n25-34岁 → 夫妻宫(戊) 四化:贪狼化禄、太阴化权、右弼化科、天机化忌\n35-44岁 → 子女宫(丁) 四化:太阴化禄、天同化权、天机化科、巨门化忌\n45-54岁 → 财帛宫(丙) 四化:天同化禄、天机化权、文昌化科、廉贞化忌\n55-64岁 → 疾厄宫(乙) 四化:天机化禄、天梁化权、紫微化科、太阴化忌\n65-74岁 → 迁移宫(甲) 四化:廉贞化禄、破军化权、武曲化科、太阳化忌\n75-84岁 → 交友宫(癸) 四化:破军化禄、巨门化权、太阴化科、贪狼化忌\n85-94岁 → 官禄宫(壬) 四化:天梁化禄、紫微化权、左辅化科、武曲化忌\n95-104岁 → 田宅宫(辛) 四化:巨门化禄、太阳化权、文曲化科、文昌化忌\n105-114岁 → 福德宫(庚) 四化:太阳化禄、武曲化权、太阴化科、天同化忌\n115-124岁 → 父母宫(己) 四化:武曲化禄、贪狼化权、天梁化科、文曲化忌\n\n## 近期流年（参考）\n2021年(辛丑) 四化:巨门化禄、太阳化权、文曲化科、文昌化忌 命宫:兄弟宫\n2022年(壬寅) 四化:天梁化禄、紫微化权、左辅化科、武曲化忌 命宫:命宫\n2023年(癸卯) 四化:破军化禄、巨门化权、太阴化科、贪狼化忌 命宫:父母宫\n2024年(甲辰) 四化:廉贞化禄、破军化权、武曲化科、太阳化忌 命宫:福德宫\n2025年(乙巳) 四化:天机化禄、天梁化权、紫微化科、太阴化忌 命宫:田宅宫\n2026年(丙午) 四化:天同化禄、天机化权、文昌化科、廉贞化忌 命宫:官禄宫\n2027年(丁未) 四化:太阴化禄、天同化权、天机化科、巨门化忌 命宫:交友宫\n2028年(戊申) 四化:贪狼化禄、太阴化权、右弼化科、天机化忌 命宫:迁移宫\n2029年(己酉) 四化:武曲化禄、贪狼化权、天梁化科、文曲化忌 命宫:疾厄宫\n2030年(庚戌) 四化:太阳化禄、武曲化权、太阴化科、天同化忌 命宫:财帛宫\n2031年(辛亥) 四化:巨门化禄、太阳化权、文曲化科、文昌化忌 命宫:子女宫\n\n请生成 100 年的 K 线 brief JSON；每条仅包含 age 与 brief，可选 reason，不得包含 open、close、high、low。",
+  "klineData": [
+    {
+      "age": 1,
+      "year": 1995,
+      "ganZhi": "乙亥",
+      "daYun": "童限",
+      "daYunRange": "1-4",
+      "open": 50.0,
+      "close": 63.3,
+      "high": 69.3,
+      "low": 43.5,
+      "score": 57,
+      "dimensions": {
+        "career": 56,
+        "wealth": 56,
+        "relationship": 37,
+        "health": 47
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 2,
+      "year": 1996,
+      "ganZhi": "丙子",
+      "daYun": "童限",
+      "daYunRange": "1-4",
+      "open": 63.3,
+      "close": 55.0,
+      "high": 70.14,
+      "low": 47.85,
+      "score": 59,
+      "dimensions": {
+        "career": 54,
+        "wealth": 42,
+        "relationship": 58,
+        "health": 53
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 3,
+      "year": 1997,
+      "ganZhi": "丁丑",
+      "daYun": "童限",
+      "daYunRange": "1-4",
+      "open": 55.0,
+      "close": 61.83,
+      "high": 68.56,
+      "low": 50.74,
+      "score": 59,
+      "dimensions": {
+        "career": 66,
+        "wealth": 44,
+        "relationship": 36,
+        "health": 51
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 4,
+      "year": 1998,
+      "ganZhi": "戊寅",
+      "daYun": "童限",
+      "daYunRange": "1-4",
+      "open": 61.83,
+      "close": 64.9,
+      "high": 70.17,
+      "low": 56.97,
+      "score": 63,
+      "dimensions": {
+        "career": 70,
+        "wealth": 66,
+        "relationship": 46,
+        "health": 45
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 5,
+      "year": 1999,
+      "ganZhi": "己卯",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 64.9,
+      "close": 76.4,
+      "high": 86.09,
+      "low": 53.83,
+      "score": 70,
+      "dimensions": {
+        "career": 75,
+        "wealth": 74,
+        "relationship": 61,
+        "health": 58
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 6,
+      "year": 2000,
+      "ganZhi": "庚辰",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 76.4,
+      "close": 62.03,
+      "high": 85.17,
+      "low": 52.46,
+      "score": 69,
+      "dimensions": {
+        "career": 78,
+        "wealth": 70,
+        "relationship": 51,
+        "health": 55
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 7,
+      "year": 2001,
+      "ganZhi": "辛巳",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 62.03,
+      "close": 65.74,
+      "high": 69.05,
+      "low": 60.19,
+      "score": 64,
+      "dimensions": {
+        "career": 62,
+        "wealth": 61,
+        "relationship": 43,
+        "health": 56
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 8,
+      "year": 2002,
+      "ganZhi": "壬午",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 65.74,
+      "close": 67.72,
+      "high": 73.09,
+      "low": 59.26,
+      "score": 66,
+      "dimensions": {
+        "career": 65,
+        "wealth": 65,
+        "relationship": 58,
+        "health": 69
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 9,
+      "year": 2003,
+      "ganZhi": "癸未",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 67.72,
+      "close": 66.77,
+      "high": 72.38,
+      "low": 62.58,
+      "score": 67,
+      "dimensions": {
+        "career": 64,
+        "wealth": 61,
+        "relationship": 57,
+        "health": 52
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 10,
+      "year": 2004,
+      "ganZhi": "甲申",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 66.77,
+      "close": 64.81,
+      "high": 73.92,
+      "low": 56.24,
+      "score": 65,
+      "dimensions": {
+        "career": 71,
+        "wealth": 52,
+        "relationship": 60,
+        "health": 68
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 11,
+      "year": 2005,
+      "ganZhi": "乙酉",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 64.81,
+      "close": 63.14,
+      "high": 69.0,
+      "low": 60.22,
+      "score": 64,
+      "dimensions": {
+        "career": 63,
+        "wealth": 52,
+        "relationship": 58,
+        "health": 57
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 12,
+      "year": 2006,
+      "ganZhi": "丙戌",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 63.14,
+      "close": 64.96,
+      "high": 74.36,
+      "low": 54.5,
+      "score": 64,
+      "dimensions": {
+        "career": 65,
+        "wealth": 66,
+        "relationship": 62,
+        "health": 50
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 13,
+      "year": 2007,
+      "ganZhi": "丁亥",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 64.96,
+      "close": 72.92,
+      "high": 80.34,
+      "low": 59.72,
+      "score": 69,
+      "dimensions": {
+        "career": 80,
+        "wealth": 65,
+        "relationship": 53,
+        "health": 61
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 14,
+      "year": 2008,
+      "ganZhi": "戊子",
+      "daYun": "戊寅",
+      "daYunRange": "5-14",
+      "open": 72.92,
+      "close": 75.14,
+      "high": 84.07,
+      "low": 64.96,
+      "score": 74,
+      "dimensions": {
+        "career": 68,
+        "wealth": 61,
+        "relationship": 68,
+        "health": 77
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 15,
+      "year": 2009,
+      "ganZhi": "己丑",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 75.14,
+      "close": 68.6,
+      "high": 80.61,
+      "low": 64.47,
+      "score": 72,
+      "dimensions": {
+        "career": 78,
+        "wealth": 73,
+        "relationship": 70,
+        "health": 68
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 16,
+      "year": 2010,
+      "ganZhi": "庚寅",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 68.6,
+      "close": 71.54,
+      "high": 77.9,
+      "low": 63.34,
+      "score": 70,
+      "dimensions": {
+        "career": 65,
+        "wealth": 67,
+        "relationship": 70,
+        "health": 74
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 17,
+      "year": 2011,
+      "ganZhi": "辛卯",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 71.54,
+      "close": 69.24,
+      "high": 76.5,
+      "low": 64.28,
+      "score": 70,
+      "dimensions": {
+        "career": 81,
+        "wealth": 69,
+        "relationship": 54,
+        "health": 56
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 18,
+      "year": 2012,
+      "ganZhi": "壬辰",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 69.24,
+      "close": 70.18,
+      "high": 79.05,
+      "low": 60.79,
+      "score": 70,
+      "dimensions": {
+        "career": 77,
+        "wealth": 61,
+        "relationship": 68,
+        "health": 56
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 19,
+      "year": 2013,
+      "ganZhi": "癸巳",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 70.18,
+      "close": 73.44,
+      "high": 78.75,
+      "low": 64.06,
+      "score": 72,
+      "dimensions": {
+        "career": 73,
+        "wealth": 76,
+        "relationship": 71,
+        "health": 62
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 20,
+      "year": 2014,
+      "ganZhi": "甲午",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 73.44,
+      "close": 70.38,
+      "high": 74.43,
+      "low": 69.05,
+      "score": 72,
+      "dimensions": {
+        "career": 68,
+        "wealth": 67,
+        "relationship": 72,
+        "health": 59
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 21,
+      "year": 2015,
+      "ganZhi": "乙未",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 70.38,
+      "close": 76.58,
+      "high": 84.89,
+      "low": 63.53,
+      "score": 74,
+      "dimensions": {
+        "career": 68,
+        "wealth": 76,
+        "relationship": 61,
+        "health": 60
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 22,
+      "year": 2016,
+      "ganZhi": "丙申",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 76.58,
+      "close": 81.36,
+      "high": 83.42,
+      "low": 72.96,
+      "score": 79,
+      "dimensions": {
+        "career": 88,
+        "wealth": 87,
+        "relationship": 69,
+        "health": 69
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 23,
+      "year": 2017,
+      "ganZhi": "丁酉",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 81.36,
+      "close": 78.98,
+      "high": 86.4,
+      "low": 74.85,
+      "score": 80,
+      "dimensions": {
+        "career": 81,
+        "wealth": 79,
+        "relationship": 72,
+        "health": 67
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 24,
+      "year": 2018,
+      "ganZhi": "戊戌",
+      "daYun": "己丑",
+      "daYunRange": "15-24",
+      "open": 78.98,
+      "close": 80.67,
+      "high": 86.46,
+      "low": 73.86,
+      "score": 80,
+      "dimensions": {
+        "career": 84,
+        "wealth": 85,
+        "relationship": 79,
+        "health": 75
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 25,
+      "year": 2019,
+      "ganZhi": "己亥",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 80.67,
+      "close": 80.05,
+      "high": 82.5,
+      "low": 78.46,
+      "score": 80,
+      "dimensions": {
+        "career": 88,
+        "wealth": 72,
+        "relationship": 81,
+        "health": 75
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 26,
+      "year": 2020,
+      "ganZhi": "庚子",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 80.05,
+      "close": 81.1,
+      "high": 83.15,
+      "low": 77.61,
+      "score": 80,
+      "dimensions": {
+        "career": 84,
+        "wealth": 89,
+        "relationship": 82,
+        "health": 70
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 27,
+      "year": 2021,
+      "ganZhi": "辛丑",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 81.1,
+      "close": 76.31,
+      "high": 87.9,
+      "low": 69.7,
+      "score": 79,
+      "dimensions": {
+        "career": 82,
+        "wealth": 74,
+        "relationship": 69,
+        "health": 65
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 28,
+      "year": 2022,
+      "ganZhi": "壬寅",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 76.31,
+      "close": 85.2,
+      "high": 88.21,
+      "low": 73.39,
+      "score": 81,
+      "dimensions": {
+        "career": 82,
+        "wealth": 90,
+        "relationship": 85,
+        "health": 82
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 29,
+      "year": 2023,
+      "ganZhi": "癸卯",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 85.2,
+      "close": 86.77,
+      "high": 94.65,
+      "low": 78.64,
+      "score": 86,
+      "dimensions": {
+        "career": 90,
+        "wealth": 81,
+        "relationship": 88,
+        "health": 78
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 30,
+      "year": 2024,
+      "ganZhi": "甲辰",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 86.77,
+      "close": 86.59,
+      "high": 93.84,
+      "low": 79.02,
+      "score": 87,
+      "dimensions": {
+        "career": 94,
+        "wealth": 92,
+        "relationship": 75,
+        "health": 90
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 31,
+      "year": 2025,
+      "ganZhi": "乙巳",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 86.59,
+      "close": 91.47,
+      "high": 94.78,
+      "low": 84.54,
+      "score": 89,
+      "dimensions": {
+        "career": 100,
+        "wealth": 93,
+        "relationship": 87,
+        "health": 95
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 32,
+      "year": 2026,
+      "ganZhi": "丙午",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 91.47,
+      "close": 92.45,
+      "high": 94.31,
+      "low": 89.01,
+      "score": 92,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 86,
+        "health": 89
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 33,
+      "year": 2027,
+      "ganZhi": "丁未",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 92.45,
+      "close": 85.73,
+      "high": 94.8,
+      "low": 81.3,
+      "score": 89,
+      "dimensions": {
+        "career": 100,
+        "wealth": 93,
+        "relationship": 89,
+        "health": 98
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 34,
+      "year": 2028,
+      "ganZhi": "戊申",
+      "daYun": "戊子",
+      "daYunRange": "25-34",
+      "open": 85.73,
+      "close": 95.66,
+      "high": 100.0,
+      "low": 82.15,
+      "score": 91,
+      "dimensions": {
+        "career": 95,
+        "wealth": 93,
+        "relationship": 87,
+        "health": 93
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 35,
+      "year": 2029,
+      "ganZhi": "己酉",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 95.66,
+      "close": 94.78,
+      "high": 100.0,
+      "low": 87.88,
+      "score": 95,
+      "dimensions": {
+        "career": 100,
+        "wealth": 93,
+        "relationship": 100,
+        "health": 90
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 36,
+      "year": 2030,
+      "ganZhi": "庚戌",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 94.78,
+      "close": 96.74,
+      "high": 100.0,
+      "low": 90.3,
+      "score": 95,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 88,
+        "health": 88
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 37,
+      "year": 2031,
+      "ganZhi": "辛亥",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 96.74,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 89.46,
+      "score": 97,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 38,
+      "year": 2032,
+      "ganZhi": "壬子",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 100.0,
+      "close": 93.38,
+      "high": 100.0,
+      "low": 92.5,
+      "score": 96,
+      "dimensions": {
+        "career": 100,
+        "wealth": 95,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 39,
+      "year": 2033,
+      "ganZhi": "癸丑",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 93.38,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 88.19,
+      "score": 95,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 99,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 40,
+      "year": 2034,
+      "ganZhi": "甲寅",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 100.0,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 92.68,
+      "score": 98,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 41,
+      "year": 2035,
+      "ganZhi": "乙卯",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 100.0,
+      "close": 92.65,
+      "high": 100.0,
+      "low": 83.78,
+      "score": 94,
+      "dimensions": {
+        "career": 99,
+        "wealth": 96,
+        "relationship": 98,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 42,
+      "year": 2036,
+      "ganZhi": "丙辰",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 92.65,
+      "close": 90.32,
+      "high": 98.37,
+      "low": 86.18,
+      "score": 92,
+      "dimensions": {
+        "career": 100,
+        "wealth": 90,
+        "relationship": 98,
+        "health": 93
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 43,
+      "year": 2037,
+      "ganZhi": "丁巳",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 90.32,
+      "close": 95.33,
+      "high": 100.0,
+      "low": 79.66,
+      "score": 91,
+      "dimensions": {
+        "career": 100,
+        "wealth": 91,
+        "relationship": 98,
+        "health": 84
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 44,
+      "year": 2038,
+      "ganZhi": "戊午",
+      "daYun": "丁亥",
+      "daYunRange": "35-44",
+      "open": 95.33,
+      "close": 92.36,
+      "high": 99.43,
+      "low": 86.38,
+      "score": 93,
+      "dimensions": {
+        "career": 96,
+        "wealth": 95,
+        "relationship": 91,
+        "health": 93
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 45,
+      "year": 2039,
+      "ganZhi": "己未",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 92.36,
+      "close": 96.72,
+      "high": 100.0,
+      "low": 87.76,
+      "score": 94,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 99,
+        "health": 99
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 46,
+      "year": 2040,
+      "ganZhi": "庚申",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 96.72,
+      "close": 97.13,
+      "high": 100.0,
+      "low": 90.13,
+      "score": 96,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 98,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 47,
+      "year": 2041,
+      "ganZhi": "辛酉",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 97.13,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 89.96,
+      "score": 97,
+      "dimensions": {
+        "career": 100,
+        "wealth": 95,
+        "relationship": 100,
+        "health": 96
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 48,
+      "year": 2042,
+      "ganZhi": "壬戌",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 100.0,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 98.09,
+      "score": 100,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 49,
+      "year": 2043,
+      "ganZhi": "癸亥",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 100.0,
+      "close": 95.65,
+      "high": 100.0,
+      "low": 94.64,
+      "score": 98,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 92
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 50,
+      "year": 2044,
+      "ganZhi": "甲子",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 95.65,
+      "close": 95.11,
+      "high": 99.31,
+      "low": 90.71,
+      "score": 95,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 95,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 51,
+      "year": 2045,
+      "ganZhi": "乙丑",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 95.11,
+      "close": 96.47,
+      "high": 100.0,
+      "low": 87.77,
+      "score": 95,
+      "dimensions": {
+        "career": 100,
+        "wealth": 98,
+        "relationship": 89,
+        "health": 87
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 52,
+      "year": 2046,
+      "ganZhi": "丙寅",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 96.47,
+      "close": 98.89,
+      "high": 100.0,
+      "low": 94.01,
+      "score": 97,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 53,
+      "year": 2047,
+      "ganZhi": "丁卯",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 98.89,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 96.07,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 54,
+      "year": 2048,
+      "ganZhi": "戊辰",
+      "daYun": "丙戌",
+      "daYunRange": "45-54",
+      "open": 100.0,
+      "close": 95.38,
+      "high": 100.0,
+      "low": 87.34,
+      "score": 96,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 93,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 55,
+      "year": 2049,
+      "ganZhi": "己巳",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 95.38,
+      "close": 91.78,
+      "high": 99.42,
+      "low": 89.48,
+      "score": 94,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 88,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 56,
+      "year": 2050,
+      "ganZhi": "庚午",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 91.78,
+      "close": 87.22,
+      "high": 97.42,
+      "low": 83.42,
+      "score": 90,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 90,
+        "health": 82
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 57,
+      "year": 2051,
+      "ganZhi": "辛未",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 87.22,
+      "close": 97.69,
+      "high": 100.0,
+      "low": 84.95,
+      "score": 92,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 86,
+        "health": 89
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 58,
+      "year": 2052,
+      "ganZhi": "壬申",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 97.69,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 94.05,
+      "score": 98,
+      "dimensions": {
+        "career": 100,
+        "wealth": 97,
+        "relationship": 100,
+        "health": 94
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 59,
+      "year": 2053,
+      "ganZhi": "癸酉",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 100.0,
+      "close": 89.08,
+      "high": 100.0,
+      "low": 80.39,
+      "score": 92,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 85,
+        "health": 86
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 60,
+      "year": 2054,
+      "ganZhi": "甲戌",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 89.08,
+      "close": 94.1,
+      "high": 100.0,
+      "low": 79.77,
+      "score": 91,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 79,
+        "health": 92
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 61,
+      "year": 2055,
+      "ganZhi": "乙亥",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 94.1,
+      "close": 86.24,
+      "high": 100.0,
+      "low": 80.73,
+      "score": 90,
+      "dimensions": {
+        "career": 95,
+        "wealth": 99,
+        "relationship": 90,
+        "health": 96
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 62,
+      "year": 2056,
+      "ganZhi": "丙子",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 86.24,
+      "close": 78.71,
+      "high": 91.38,
+      "low": 71.85,
+      "score": 82,
+      "dimensions": {
+        "career": 87,
+        "wealth": 78,
+        "relationship": 85,
+        "health": 80
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 63,
+      "year": 2057,
+      "ganZhi": "丁丑",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 78.71,
+      "close": 84.46,
+      "high": 92.27,
+      "low": 73.0,
+      "score": 82,
+      "dimensions": {
+        "career": 95,
+        "wealth": 89,
+        "relationship": 68,
+        "health": 81
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 64,
+      "year": 2058,
+      "ganZhi": "戊寅",
+      "daYun": "乙酉",
+      "daYunRange": "55-64",
+      "open": 84.46,
+      "close": 88.26,
+      "high": 92.62,
+      "low": 80.5,
+      "score": 86,
+      "dimensions": {
+        "career": 95,
+        "wealth": 81,
+        "relationship": 80,
+        "health": 94
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 65,
+      "year": 2059,
+      "ganZhi": "己卯",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 88.26,
+      "close": 99.77,
+      "high": 100.0,
+      "low": 85.46,
+      "score": 93,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 99,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 66,
+      "year": 2060,
+      "ganZhi": "庚辰",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 99.77,
+      "close": 96.21,
+      "high": 100.0,
+      "low": 91.88,
+      "score": 97,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 95,
+        "health": 95
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 67,
+      "year": 2061,
+      "ganZhi": "辛巳",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 96.21,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 91.55,
+      "score": 97,
+      "dimensions": {
+        "career": 100,
+        "wealth": 94,
+        "relationship": 99,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 68,
+      "year": 2062,
+      "ganZhi": "壬午",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 100.0,
+      "close": 99.12,
+      "high": 100.0,
+      "low": 98.21,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 97,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 69,
+      "year": 2063,
+      "ganZhi": "癸未",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 99.12,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 97.46,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 99,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 70,
+      "year": 2064,
+      "ganZhi": "甲申",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 100.0,
+      "close": 93.24,
+      "high": 100.0,
+      "low": 86.7,
+      "score": 95,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 95,
+        "health": 88
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 71,
+      "year": 2065,
+      "ganZhi": "乙酉",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 93.24,
+      "close": 97.41,
+      "high": 100.0,
+      "low": 89.65,
+      "score": 95,
+      "dimensions": {
+        "career": 99,
+        "wealth": 100,
+        "relationship": 84,
+        "health": 99
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 72,
+      "year": 2066,
+      "ganZhi": "丙戌",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 97.41,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 93.38,
+      "score": 98,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 73,
+      "year": 2067,
+      "ganZhi": "丁亥",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 100.0,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 97.8,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 91,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 74,
+      "year": 2068,
+      "ganZhi": "戊子",
+      "daYun": "甲申",
+      "daYunRange": "65-74",
+      "open": 100.0,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 92.02,
+      "score": 98,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 75,
+      "year": 2069,
+      "ganZhi": "己丑",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 100.0,
+      "close": 94.63,
+      "high": 100.0,
+      "low": 89.2,
+      "score": 96,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 94,
+        "health": 94
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 76,
+      "year": 2070,
+      "ganZhi": "庚寅",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 94.63,
+      "close": 84.13,
+      "high": 100.0,
+      "low": 75.56,
+      "score": 89,
+      "dimensions": {
+        "career": 95,
+        "wealth": 91,
+        "relationship": 94,
+        "health": 97
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 77,
+      "year": 2071,
+      "ganZhi": "辛卯",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 84.13,
+      "close": 95.54,
+      "high": 100.0,
+      "low": 79.45,
+      "score": 90,
+      "dimensions": {
+        "career": 99,
+        "wealth": 100,
+        "relationship": 77,
+        "health": 99
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 78,
+      "year": 2072,
+      "ganZhi": "壬辰",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 95.54,
+      "close": 99.68,
+      "high": 100.0,
+      "low": 93.52,
+      "score": 97,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 97,
+        "health": 98
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 79,
+      "year": 2073,
+      "ganZhi": "癸巳",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 99.68,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 98.1,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 96
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 80,
+      "year": 2074,
+      "ganZhi": "甲午",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 100.0,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 96.26,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 100,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 81,
+      "year": 2075,
+      "ganZhi": "乙未",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 100.0,
+      "close": 100.0,
+      "high": 100.0,
+      "low": 94.88,
+      "score": 99,
+      "dimensions": {
+        "career": 100,
+        "wealth": 98,
+        "relationship": 96,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 82,
+      "year": 2076,
+      "ganZhi": "丙申",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 100.0,
+      "close": 97.61,
+      "high": 100.0,
+      "low": 93.63,
+      "score": 98,
+      "dimensions": {
+        "career": 100,
+        "wealth": 96,
+        "relationship": 96,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 83,
+      "year": 2077,
+      "ganZhi": "丁酉",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 97.61,
+      "close": 88.84,
+      "high": 100.0,
+      "low": 84.79,
+      "score": 93,
+      "dimensions": {
+        "career": 100,
+        "wealth": 98,
+        "relationship": 100,
+        "health": 98
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 84,
+      "year": 2078,
+      "ganZhi": "戊戌",
+      "daYun": "癸未",
+      "daYunRange": "75-84",
+      "open": 88.84,
+      "close": 92.99,
+      "high": 99.67,
+      "low": 84.23,
+      "score": 91,
+      "dimensions": {
+        "career": 100,
+        "wealth": 86,
+        "relationship": 91,
+        "health": 100
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 85,
+      "year": 2079,
+      "ganZhi": "己亥",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 92.99,
+      "close": 89.32,
+      "high": 96.03,
+      "low": 84.48,
+      "score": 91,
+      "dimensions": {
+        "career": 100,
+        "wealth": 92,
+        "relationship": 96,
+        "health": 85
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 86,
+      "year": 2080,
+      "ganZhi": "庚子",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 89.32,
+      "close": 86.7,
+      "high": 93.51,
+      "low": 84.23,
+      "score": 88,
+      "dimensions": {
+        "career": 87,
+        "wealth": 97,
+        "relationship": 84,
+        "health": 76
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 87,
+      "year": 2081,
+      "ganZhi": "辛丑",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 86.7,
+      "close": 74.27,
+      "high": 88.92,
+      "low": 71.95,
+      "score": 80,
+      "dimensions": {
+        "career": 77,
+        "wealth": 88,
+        "relationship": 78,
+        "health": 78
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 88,
+      "year": 2082,
+      "ganZhi": "壬寅",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 74.27,
+      "close": 59.77,
+      "high": 84.15,
+      "low": 47.61,
+      "score": 66,
+      "dimensions": {
+        "career": 59,
+        "wealth": 64,
+        "relationship": 51,
+        "health": 65
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 89,
+      "year": 2083,
+      "ganZhi": "癸卯",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 59.77,
+      "close": 62.83,
+      "high": 75.09,
+      "low": 51.4,
+      "score": 62,
+      "dimensions": {
+        "career": 67,
+        "wealth": 57,
+        "relationship": 54,
+        "health": 49
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 90,
+      "year": 2084,
+      "ganZhi": "甲辰",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 62.83,
+      "close": 71.7,
+      "high": 78.69,
+      "low": 58.51,
+      "score": 68,
+      "dimensions": {
+        "career": 71,
+        "wealth": 54,
+        "relationship": 65,
+        "health": 51
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    },
+    {
+      "age": 91,
+      "year": 2085,
+      "ganZhi": "乙巳",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 71.7,
+      "close": 82.39,
+      "high": 84.39,
+      "low": 68.95,
+      "score": 77,
+      "dimensions": {
+        "career": 78,
+        "wealth": 86,
+        "relationship": 72,
+        "health": 82
+      },
+      "yearlyMutagens": [
+        "天机化禄",
+        "天梁化权",
+        "紫微化科",
+        "太阴化忌"
+      ]
+    },
+    {
+      "age": 92,
+      "year": 2086,
+      "ganZhi": "丙午",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 82.39,
+      "close": 81.55,
+      "high": 87.06,
+      "low": 76.13,
+      "score": 82,
+      "dimensions": {
+        "career": 91,
+        "wealth": 78,
+        "relationship": 78,
+        "health": 74
+      },
+      "yearlyMutagens": [
+        "天同化禄",
+        "天机化权",
+        "文昌化科",
+        "廉贞化忌"
+      ]
+    },
+    {
+      "age": 93,
+      "year": 2087,
+      "ganZhi": "丁未",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 81.55,
+      "close": 85.19,
+      "high": 85.73,
+      "low": 81.27,
+      "score": 83,
+      "dimensions": {
+        "career": 92,
+        "wealth": 81,
+        "relationship": 70,
+        "health": 83
+      },
+      "yearlyMutagens": [
+        "太阴化禄",
+        "天同化权",
+        "天机化科",
+        "巨门化忌"
+      ]
+    },
+    {
+      "age": 94,
+      "year": 2088,
+      "ganZhi": "戊申",
+      "daYun": "壬午",
+      "daYunRange": "85-94",
+      "open": 85.19,
+      "close": 82.35,
+      "high": 87.24,
+      "low": 80.74,
+      "score": 84,
+      "dimensions": {
+        "career": 93,
+        "wealth": 88,
+        "relationship": 81,
+        "health": 78
+      },
+      "yearlyMutagens": [
+        "贪狼化禄",
+        "太阴化权",
+        "右弼化科",
+        "天机化忌"
+      ]
+    },
+    {
+      "age": 95,
+      "year": 2089,
+      "ganZhi": "己酉",
+      "daYun": "辛巳",
+      "daYunRange": "95-104",
+      "open": 82.35,
+      "close": 81.24,
+      "high": 86.26,
+      "low": 78.28,
+      "score": 82,
+      "dimensions": {
+        "career": 85,
+        "wealth": 79,
+        "relationship": 74,
+        "health": 70
+      },
+      "yearlyMutagens": [
+        "武曲化禄",
+        "贪狼化权",
+        "天梁化科",
+        "文曲化忌"
+      ]
+    },
+    {
+      "age": 96,
+      "year": 2090,
+      "ganZhi": "庚戌",
+      "daYun": "辛巳",
+      "daYunRange": "95-104",
+      "open": 81.24,
+      "close": 84.49,
+      "high": 91.94,
+      "low": 72.13,
+      "score": 82,
+      "dimensions": {
+        "career": 81,
+        "wealth": 76,
+        "relationship": 84,
+        "health": 77
+      },
+      "yearlyMutagens": [
+        "太阳化禄",
+        "武曲化权",
+        "太阴化科",
+        "天同化忌"
+      ]
+    },
+    {
+      "age": 97,
+      "year": 2091,
+      "ganZhi": "辛亥",
+      "daYun": "辛巳",
+      "daYunRange": "95-104",
+      "open": 84.49,
+      "close": 85.43,
+      "high": 89.4,
+      "low": 78.74,
+      "score": 85,
+      "dimensions": {
+        "career": 91,
+        "wealth": 83,
+        "relationship": 74,
+        "health": 92
+      },
+      "yearlyMutagens": [
+        "巨门化禄",
+        "太阳化权",
+        "文曲化科",
+        "文昌化忌"
+      ]
+    },
+    {
+      "age": 98,
+      "year": 2092,
+      "ganZhi": "壬子",
+      "daYun": "辛巳",
+      "daYunRange": "95-104",
+      "open": 85.43,
+      "close": 90.39,
+      "high": 96.85,
+      "low": 79.43,
+      "score": 88,
+      "dimensions": {
+        "career": 100,
+        "wealth": 100,
+        "relationship": 76,
+        "health": 92
+      },
+      "yearlyMutagens": [
+        "天梁化禄",
+        "紫微化权",
+        "左辅化科",
+        "武曲化忌"
+      ]
+    },
+    {
+      "age": 99,
+      "year": 2093,
+      "ganZhi": "癸丑",
+      "daYun": "辛巳",
+      "daYunRange": "95-104",
+      "open": 90.39,
+      "close": 82.75,
+      "high": 95.11,
+      "low": 78.18,
+      "score": 87,
+      "dimensions": {
+        "career": 91,
+        "wealth": 81,
+        "relationship": 84,
+        "health": 94
+      },
+      "yearlyMutagens": [
+        "破军化禄",
+        "巨门化权",
+        "太阴化科",
+        "贪狼化忌"
+      ]
+    },
+    {
+      "age": 100,
+      "year": 2094,
+      "ganZhi": "甲寅",
+      "daYun": "辛巳",
+      "daYunRange": "95-104",
+      "open": 82.75,
+      "close": 85.58,
+      "high": 91.07,
+      "low": 78.05,
+      "score": 84,
+      "dimensions": {
+        "career": 89,
+        "wealth": 94,
+        "relationship": 77,
+        "health": 84
+      },
+      "yearlyMutagens": [
+        "廉贞化禄",
+        "破军化权",
+        "武曲化科",
+        "太阳化忌"
+      ]
+    }
+  ]
+}

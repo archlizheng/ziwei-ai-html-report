@@ -36,6 +36,18 @@ DISCLAIMER_MARKERS: Tuple[str, ...] = (
 
 _CHINESE_RE = re.compile(r"[\u4e00-\u9fff]")
 
+# Model-generated HTML fragments must not contain executable markup.
+_FRAGMENT_SCRIPT_RE = re.compile(r"<\s*script\b", re.IGNORECASE)
+_FRAGMENT_EVENT_ATTR_RE = re.compile(
+    r"""\s(?:on[a-z]+)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)""",
+    re.IGNORECASE,
+)
+_FRAGMENT_JAVASCRIPT_URL_RE = re.compile(r"javascript\s*:", re.IGNORECASE)
+_EXTERNAL_SCRIPT_SRC_RE = re.compile(
+    r"""<\s*script\b[^>]*\bsrc\s*=\s*(?:"[^"]*"|'[^']*')""",
+    re.IGNORECASE,
+)
+
 
 def count_chinese_chars(text: str) -> int:
     return len(_CHINESE_RE.findall(text))
@@ -99,12 +111,25 @@ def _html_visible_text(html: str) -> str:
     return no_scripts
 
 
+def validate_safe_html_fragment(html_or_text: str, *, label: str = "HTML 片段") -> Tuple[bool, str]:
+    """Reject executable or script-bearing markup in model-generated content fragments."""
+    if _FRAGMENT_SCRIPT_RE.search(html_or_text):
+        return False, f"{label} 不允许包含 <script> 标签"
+    if _FRAGMENT_EVENT_ATTR_RE.search(html_or_text):
+        return False, f"{label} 不允许包含事件属性（如 onclick、onerror）"
+    if _FRAGMENT_JAVASCRIPT_URL_RE.search(html_or_text):
+        return False, f"{label} 不允许包含 javascript: URL"
+    return True, "ok"
+
+
 def validate_html_delivery(html: str) -> Tuple[bool, str]:
     if "<!DOCTYPE html>" not in html and "<!doctype html>" not in html.lower():
         return False, "HTML 交付物缺少 DOCTYPE"
     for marker in DISCLAIMER_MARKERS:
         if marker not in html:
             return False, f"HTML 缺少免责声明关键句：{marker}"
+    if _EXTERNAL_SCRIPT_SRC_RE.search(html):
+        return False, "HTML 不允许外链脚本（<script src=...>）"
     visible = _html_visible_text(html)
     for pattern in PLACEHOLDER_PATTERNS:
         if pattern.search(visible):
@@ -139,6 +164,8 @@ def validate_report_inputs(
     errors: List[str] = []
     for ok, msg in (
         validate_chart_payload(chart),
+        validate_safe_html_fragment(natal_html, label="综合批注"),
+        validate_safe_html_fragment(yearly_html, label="流年报告"),
         validate_natal_content(natal_html),
         validate_yearly_content(yearly_html),
         validate_kline_payload(kline_rows),

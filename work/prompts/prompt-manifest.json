@@ -1,0 +1,63 @@
+{
+  "version": "2",
+  "promptsSource": "/Users/ethan/Project/ziwei-doushu/ziwei-ai-html-report/prompts.md",
+  "payloadSummary": {
+    "solar": "1995-08-21",
+    "localTime": "11:40",
+    "gender": "male",
+    "birthplace": "广东省深圳市",
+    "fiveElementsClass": "土5局",
+    "targetYear": 2026,
+    "hasKlineData": true
+  },
+  "promptFiles": {
+    "natal.system.md": "prompts/natal.system.md",
+    "natal.user.md": "prompts/natal.user.md",
+    "yearly.system.md": "prompts/yearly.system.md",
+    "yearly.user.md": "prompts/yearly.user.md",
+    "kline.system.md": "prompts/kline.system.md",
+    "kline.user.md": "prompts/kline.user.md"
+  },
+  "promptHashes": {
+    "natal.system.md": "31f37b26727ed43fd760dc6dacc7a87d854146f06b2c5b935e89cd88c1fa870c",
+    "natal.user.md": "804ecd56d0b22e4879f6c6ceac6a13f8937e7d4640be6dd5d71ecfb5df1d0638",
+    "yearly.system.md": "4153d845bb001cf7a359a58834bbeb8e80406d974e99dc77ec18cb8458ba0f30",
+    "yearly.user.md": "1b99b4123c32f7b0be1cafd5f2cb87621700a098cfef1fb3df7ec0671e0f59fa",
+    "kline.system.md": "ea3b38100483de5d90f879792aa3232e600e2ec7100e947724e2edfd724eea9e",
+    "kline.user.md": "25011dd2fb9f021094c445c44037e65b4d6dda86ecac89f27377dccf80a6fa78"
+  },
+  "agentContract": {
+    "description": "Agent 按 manifest 调用模型写综合/流年正文；K 线 OHLC 必须使用 payload.klineData。",
+    "requiredOutputs": [
+      {
+        "id": "natal",
+        "path": "work/natal.html",
+        "format": "html",
+        "systemPrompt": "prompts/natal.system.md",
+        "userPrompt": "prompts/natal.user.md"
+      },
+      {
+        "id": "yearly",
+        "path": "work/yearly.html",
+        "format": "html",
+        "systemPrompt": "prompts/yearly.system.md",
+        "userPrompt": "prompts/yearly.user.md"
+      },
+      {
+        "id": "klineBrief",
+        "path": "work/kline-brief.json",
+        "format": "json",
+        "systemPrompt": "prompts/kline.system.md",
+        "userPrompt": "prompts/kline.user.md",
+        "note": "模型只能返回 age/brief/reason，不得返回或改写 open/high/low/close。"
+      }
+    ],
+    "forbiddenInProduction": [
+      "--skip-validation",
+      "模型生成或覆盖 K 线 OHLC"
+    ]
+  },
+  "assemble": {
+    "command": "python3 tools/generate_report.py --payload-json work/payload.json --natal-html work/natal.html --yearly-html work/yearly.html --kline-brief-json work/kline-brief.json -o work/report.html"
+  }
+}

@@ -542,19 +542,70 @@ def _add_star_to_palaces(palaces: List[Dict[str, Any]], branch: str, star: Dict[
             return
 
 
+def nominal_age(lunar_birth_year: int, target_year: int) -> int:
+    """虚岁：流年分析年 − 农历生年 + 1（大限、流年叠宫口径）。"""
+    return target_year - lunar_birth_year + 1
+
+
+def actual_age_on(birth_year: int, birth_month: int, birth_day: int, on: _dt.date) -> int:
+    """周岁：按阳历生日计算截至某日已满的周岁。"""
+    age = on.year - birth_year
+    if (on.month, on.day) < (birth_month, birth_day):
+        age -= 1
+    return max(0, age)
+
+
+def _parse_birth_solar(chart: Dict[str, Any]) -> Tuple[int, int, int]:
+    birth = chart.get("birth") or {}
+    solar = birth.get("effectiveSolar") or birth.get("solar") or ""
+    y, m, d = map(int, str(solar).split("-"))
+    return y, m, d
+
+
+def compute_age_info(
+    chart: Dict[str, Any],
+    target_year: int,
+    reference: Optional[_dt.date] = None,
+) -> Dict[str, Any]:
+    """返回虚岁与周岁（年末 / 参考日）对照，供报告与流年上下文展示。"""
+    ref = reference or _dt.date.today()
+    by, bm, bd = _parse_birth_solar(chart)
+    lunar_year = int(chart["lunar"]["year"])
+    nominal = nominal_age(lunar_year, target_year)
+    at_year_end = actual_age_on(by, bm, bd, _dt.date(target_year, 12, 31))
+    at_ref = actual_age_on(by, bm, bd, ref)
+    return {
+        "nominalAge": nominal,
+        "actualAgeAtYearEnd": at_year_end,
+        "actualAgeAtReference": at_ref,
+        "referenceDate": ref.isoformat(),
+        "targetYear": target_year,
+        "lunarBirthYear": lunar_year,
+    }
+
+
 def _current_decadal(chart: Dict[str, Any], target_year: int) -> Dict[str, Any]:
-    age = target_year - chart["lunar"]["year"] + 1
+    ages = compute_age_info(chart, target_year)
+    age = ages["nominalAge"]
     for palace in chart["palaces"]:
         start, end = [int(x) for x in palace["decadalRange"].split("-")]
         if start <= age <= end:
             return {
                 "age": age,
+                **ages,
                 "palaceName": palace["name"],
                 "branch": palace["branch"],
                 "stem": palace["stem"],
                 "mutagens": sihua_list(palace["stem"]),
             }
-    return {"age": age, "palaceName": "命宫", "branch": chart["lifePalace"]["branch"], "stem": chart["lifePalace"]["stem"], "mutagens": sihua_list(chart["lifePalace"]["stem"])}
+    return {
+        "age": age,
+        **ages,
+        "palaceName": "命宫",
+        "branch": chart["lifePalace"]["branch"],
+        "stem": chart["lifePalace"]["stem"],
+        "mutagens": sihua_list(chart["lifePalace"]["stem"]),
+    }
 
 
 def sihua_list(stem: str) -> List[str]:
@@ -1035,7 +1086,14 @@ def build_yearly_context(chart: Dict[str, Any], target_year: int) -> str:
     lines.append(f"- 流年四化：{'、'.join(data['mutagens'])}")
     lines.append(f"- 流年命宫位置：{data['palaceName']}（{data['palaceBranch']}宫）")
     lines += ["", "## 当前大限"]
-    lines.append(f"- 当前虚岁：{current['age']}岁")
+    lines.append(f"- 当前虚岁：{current['age']}岁（大限、流年叠宫口径）")
+    lines.append(
+        f"- 当前周岁：截至{target_year}-12-31 为 {current['actualAgeAtYearEnd']} 岁"
+    )
+    ref = current.get("referenceDate", "")
+    ref_age = current.get("actualAgeAtReference")
+    if ref and ref_age is not None and ref_age != current["actualAgeAtYearEnd"]:
+        lines.append(f"- 周岁（截至{ref}）：{ref_age} 岁")
     lines.append(f"- 大限天干：{current['stem']}")
     lines.append(f"- 大限四化：{'、'.join(current['mutagens'])}")
     lines.append(f"- 大限命宫位置：{current['palaceName']}（{current['branch']}宫）")
@@ -1132,6 +1190,7 @@ def validate_kline_data(kline_rows: List[Dict[str, Any]]) -> Tuple[bool, str]:
 def build_payload(chart: Dict[str, Any], target_year: int) -> Dict[str, Any]:
     return {
         "chart": chart,
+        "ageInfo": compute_age_info(chart, target_year),
         "natalContext": build_prompt_context(chart),
         "yearlyContext": build_yearly_context(chart, target_year),
         "klineContext": build_kline_context(chart),

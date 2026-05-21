@@ -864,6 +864,29 @@ class ReleaseHardeningTests(unittest.TestCase):
         self.assertEqual(payload["chart"]["birth"]["coordinates"]["source"], "offline")
 
 
+class AgeDisplayTests(unittest.TestCase):
+    def test_nominal_and_actual_ages_for_1995_birth_in_2026(self):
+        chart = zw.generate_chart(
+            1995, 8, 21, 11, "male", 2026, minute=40, use_true_solar_time=False
+        )
+        info = zw.compute_age_info(chart, 2026, reference=__import__("datetime").date(2026, 5, 21))
+        self.assertEqual(info["nominalAge"], 32)
+        self.assertEqual(info["actualAgeAtYearEnd"], 31)
+        self.assertEqual(info["actualAgeAtReference"], 30)
+
+    def test_yearly_context_lists_both_age_types(self):
+        chart = zw.generate_chart(1995, 8, 21, 11, "male", 2026, use_true_solar_time=False)
+        ctx = zw.build_yearly_context(chart, 2026)
+        self.assertIn("当前虚岁：32岁", ctx)
+        self.assertIn("截至2026-12-31 为 31 岁", ctx)
+
+    def test_payload_includes_age_info(self):
+        chart = zw.generate_chart(1995, 8, 21, 11, "male", 2026, use_true_solar_time=False)
+        payload = zw.build_payload(chart, 2026)
+        self.assertEqual(payload["ageInfo"]["nominalAge"], 32)
+        self.assertEqual(payload["ageInfo"]["actualAgeAtYearEnd"], 31)
+
+
 class ReportTemplateTests(unittest.TestCase):
     def test_chart_section_before_natal_in_template(self):
         """report-template.html：紫微排盘图须先于紫微命盘综合批注。"""
@@ -878,6 +901,10 @@ class ReportTemplateTests(unittest.TestCase):
             i_natal,
             msg="report-template.html: section-chart must appear before section-natal",
         )
+
+    def test_template_has_age_meta_span(self):
+        text = (ROOT / "report-template.html").read_text(encoding="utf-8")
+        self.assertIn('id="meta-age"', text)
 
 
 if __name__ == "__main__":

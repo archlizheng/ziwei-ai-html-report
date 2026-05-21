@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from report_validators import validate_report_inputs
-from ziwei_offline import generate_chart
+from ziwei_offline import compute_age_info, generate_chart
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_FILE = SKILL_ROOT / "report-template.html"
@@ -53,6 +53,15 @@ def build_meta_values(chart: Dict[str, Any], target_year: int) -> Dict[str, str]
     true_solar = birth.get("trueSolar") or {}
     coords = birth.get("coordinates") or {}
     correction = true_solar.get("totalCorrectionMinutes", 0)
+    ages = compute_age_info(chart, target_year)
+    age_parts = [
+        f"虚岁 {ages['nominalAge']} 岁（排大限）",
+        f"周岁 {ages['actualAgeAtYearEnd']} 岁（截至{target_year}-12-31）",
+    ]
+    if ages["actualAgeAtReference"] != ages["actualAgeAtYearEnd"]:
+        age_parts.append(
+            f"周岁 {ages['actualAgeAtReference']} 岁（截至{ages['referenceDate']}）"
+        )
     return {
         "meta-solar": str(birth.get("effectiveSolar") or birth.get("solar", "")),
         "meta-birthplace": str(birth.get("birthplace") or "未提供"),
@@ -63,6 +72,7 @@ def build_meta_values(chart: Dict[str, Any], target_year: int) -> Dict[str, str]
         "meta-gender": _gender_label(str(birth.get("gender", ""))),
         "meta-five": str(chart.get("fiveElementsClass", "")),
         "meta-target-year": str(target_year),
+        "meta-age": " · ".join(age_parts),
         "meta-generated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
 
