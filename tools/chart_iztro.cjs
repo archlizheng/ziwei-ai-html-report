@@ -32,6 +32,22 @@ const MAJOR_DESC = {
 };
 
 const SHICHEN = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+const MINOR_STAR_ORDER = [
+  "左辅",
+  "右弼",
+  "文昌",
+  "文曲",
+  "天魁",
+  "天钺",
+  "禄存",
+  "天马",
+  "擎羊",
+  "陀罗",
+  "火星",
+  "铃星",
+  "地空",
+  "地劫",
+];
 
 /** 与 app/src/lib/astro.ts hourToTimeIndex 对齐（支持分钟） */
 function hourToTimeIndex(hour, minute) {
@@ -136,6 +152,16 @@ function mapMinor(s) {
   return o;
 }
 
+function sortMinorStars(stars) {
+  return stars.slice().sort((a, b) => {
+    const ai = MINOR_STAR_ORDER.indexOf(a.name);
+    const bi = MINOR_STAR_ORDER.indexOf(b.name);
+    const ao = ai === -1 ? MINOR_STAR_ORDER.length : ai;
+    const bo = bi === -1 ? MINOR_STAR_ORDER.length : bi;
+    return ao - bo || String(a.name).localeCompare(String(b.name), "zh-Hans-CN");
+  });
+}
+
 function natalMutagensFromPalaces(palaces) {
   const r = [];
   for (const p of palaces) {
@@ -164,7 +190,7 @@ function buildChart(ast, opts) {
     const dr = p.decadal && p.decadal.range;
     const rangeStr = dr ? `${dr[0]}-${dr[1]}` : "";
     const majors = (p.majorStars || []).map(mapStar);
-    const minors = (p.minorStars || []).map(mapMinor);
+    const minors = sortMinorStars((p.minorStars || []).map(mapMinor));
     return {
       name,
       branch: p.earthlyBranch,

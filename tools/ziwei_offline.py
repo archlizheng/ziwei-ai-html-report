@@ -1300,6 +1300,15 @@ def _parse_time(value: str) -> Tuple[int, int]:
     return hour, minute
 
 
+def _parse_gender(value: str) -> str:
+    normalized = value.strip().lower()
+    if normalized in {"male", "m", "男"}:
+        return "male"
+    if normalized in {"female", "f", "女"}:
+        return "female"
+    raise argparse.ArgumentTypeError("gender 须为 male/female 或 男/女")
+
+
 def _cli_error(parser: argparse.ArgumentParser, message: str) -> int:
     parser.exit(2, f"error: {message}\n")
     return 2
@@ -1315,7 +1324,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--solar", type=_parse_date, help="阳历生日，格式 YYYY-MM-DD")
     parser.add_argument("--hour", type=int, help="出生小时，0-23；兼容旧参数")
     parser.add_argument("--time", help="出生时间，格式 HH:mm；优先于 --hour")
-    parser.add_argument("--gender", choices=["male", "female"], help="性别")
+    parser.add_argument("--gender", type=_parse_gender, help="性别：male/female 或 男/女")
     parser.add_argument("--birthplace", help="出生地，如 广东省佛山市顺德区")
     parser.add_argument("--longitude", type=float, help="经度（手工指定时优先）")
     parser.add_argument("--latitude", type=float, help="纬度（手工指定时优先）")

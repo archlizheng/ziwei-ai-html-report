@@ -313,6 +313,11 @@ class IztroAlignmentTests(unittest.TestCase):
         ("韩予安", "1955-03-03", "18:39", "female", "兰州市"),
         ("秦疏影", "2032-11-14", "23:41", "female", "大连市"),
     ]
+    RELEASE_AUDIT_PROFILES = [
+        ("深圳上午男盘", "1996-03-16", "08:40", "male", "广东省深圳市"),
+        ("喀什边界男盘", "1994-07-01", "23:50", "male", "喀什市"),
+        ("厦门夜间女盘", "1991-09-28", "21:43", "female", "厦门市"),
+    ]
 
     @classmethod
     def setUpClass(cls):
@@ -339,6 +344,10 @@ class IztroAlignmentTests(unittest.TestCase):
             "timeBranch": chart["birth"]["timeBranch"],
             "majorStars": {
                 palace["name"]: [star["name"] for star in palace["majorStars"]]
+                for palace in chart["palaces"]
+            },
+            "minorStars": {
+                palace["name"]: [star["name"] for star in palace["minorStars"]]
                 for palace in chart["palaces"]
             },
         }
@@ -473,6 +482,62 @@ class IztroAlignmentTests(unittest.TestCase):
                 self.assertTrue(offline["birth"]["trueSolar"]["applied"])
                 self.assertEqual(self._compact_core(offline), self._compact_core(chart))
 
+    def test_release_audit_profiles_match_iztro_true_solar_pipeline(self):
+        for name, solar, time_value, gender, birthplace in self.RELEASE_AUDIT_PROFILES:
+            with self.subTest(name=name, solar=solar, time=time_value, gender=gender, birthplace=birthplace):
+                hour, minute = map(int, time_value.split(":"))
+                year, month, day = map(int, solar.split("-"))
+                offline = zw.generate_chart(
+                    year,
+                    month,
+                    day,
+                    hour,
+                    gender,
+                    target_year=2026,
+                    minute=minute,
+                    birthplace=birthplace,
+                    geocode_mode="offline",
+                )
+                birth_json = self._emit_iztro_birth_json(solar, time_value, gender, birthplace)
+                iztro = subprocess.run(
+                    ["node", str(ROOT / "tools" / "chart_iztro.cjs"), "--birth-json", "-"],
+                    input=birth_json,
+                    cwd=ROOT,
+                    check=True,
+                    text=True,
+                    capture_output=True,
+                )
+                proc = subprocess.run(
+                    [
+                        sys.executable,
+                        str(ROOT / "tools" / "ziwei_offline.py"),
+                        "--from-chart-json",
+                        "--target-year",
+                        "2026",
+                        "--format",
+                        "json",
+                    ],
+                    input=iztro.stdout,
+                    cwd=ROOT,
+                    check=True,
+                    text=True,
+                    capture_output=True,
+                )
+                chart = json.loads(proc.stdout)["chart"]
+                self.assertEqual(self._compact_core(offline), self._compact_core(chart))
+                yearly_keys = ("year", "stem", "branch", "mutagens", "palaceName")
+                self.assertEqual(
+                    {key: offline["yearly"][key] for key in yearly_keys},
+                    {key: chart["yearly"][key] for key in yearly_keys},
+                )
+                decadal_keys = ("age", "palaceName", "branch", "stem", "mutagens")
+                self.assertEqual(
+                    {key: offline["yearly"]["currentDecadal"][key] for key in decadal_keys},
+                    {key: chart["yearly"]["currentDecadal"][key] for key in decadal_keys},
+                )
+                ok, msg = zw.validate_kline_data(zw.build_payload(chart, 2026)["klineData"])
+                self.assertTrue(ok, msg)
+
     def test_emit_iztro_birth_json_uses_effective_solar_and_time_index(self):
         birth_json = json.loads(self._emit_iztro_birth_json("1987-11-02", "23:18", "male", "上海市"))
         self.assertEqual(birth_json["solarDate"], "1987-11-03")
@@ -583,6 +648,27 @@ class ContextOutputTests(unittest.TestCase):
         birth = payload["chart"]["birth"]
         self.assertEqual(birth["localTime"], "11:30")
         self.assertIn(birth["coordinates"]["source"], {"online", "offline", "manual"})
+
+    def test_cli_accepts_chinese_gender_promised_by_docs(self):
+        proc = run_cli(
+            "--solar",
+            "1996-03-16",
+            "--time",
+            "08:40",
+            "--gender",
+            "男",
+            "--birthplace",
+            "广东省深圳市",
+            "--geocode-mode",
+            "offline",
+            "--target-year",
+            "2026",
+            "--format",
+            "json",
+        )
+        self.assertEqual(proc.returncode, 0, msg=proc.stderr)
+        payload = json.loads(proc.stdout)
+        self.assertEqual(payload["chart"]["birth"]["gender"], "male")
 
     def test_cli_offline_geocode_mode_hits_local_fallback(self):
         proc = run_cli(
