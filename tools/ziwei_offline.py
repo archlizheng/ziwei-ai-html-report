@@ -158,6 +158,41 @@ BRIGHTNESS_COEF = {
     "陷": 0.5,
 }
 
+# 与 iztro/lib/data/stars.js STARS_INFO 对齐；数组下标从寅宫起（PALACE_BRANCHES 顺序）。
+_BRIGHTNESS_CODE_ZH = {
+    "miao": "庙",
+    "wang": "旺",
+    "de": "得",
+    "li": "利",
+    "ping": "平",
+    "bu": "不",
+    "xian": "陷",
+}
+
+_MAJOR_STAR_BRIGHTNESS_CODES: Dict[str, List[str]] = {
+    "紫微": ["wang", "wang", "de", "wang", "miao", "miao", "wang", "wang", "de", "wang", "ping", "miao"],
+    "天机": ["de", "wang", "li", "ping", "miao", "xian", "de", "wang", "li", "ping", "miao", "xian"],
+    "太阳": ["wang", "miao", "wang", "wang", "wang", "de", "de", "xian", "bu", "xian", "xian", "bu"],
+    "武曲": ["de", "li", "miao", "ping", "wang", "miao", "de", "li", "miao", "ping", "wang", "miao"],
+    "天同": ["li", "ping", "ping", "miao", "xian", "bu", "wang", "ping", "ping", "miao", "wang", "bu"],
+    "廉贞": ["miao", "ping", "li", "xian", "ping", "li", "miao", "ping", "li", "xian", "ping", "li"],
+    "天府": ["miao", "de", "miao", "de", "wang", "miao", "de", "wang", "miao", "de", "miao", "miao"],
+    "太阴": ["wang", "xian", "xian", "xian", "bu", "bu", "li", "bu", "wang", "miao", "miao", "miao"],
+    "贪狼": ["ping", "li", "miao", "xian", "wang", "miao", "ping", "li", "miao", "xian", "wang", "miao"],
+    "巨门": ["miao", "miao", "xian", "wang", "wang", "bu", "miao", "miao", "xian", "wang", "wang", "bu"],
+    "天相": ["miao", "xian", "de", "de", "miao", "de", "miao", "xian", "de", "de", "miao", "miao"],
+    "天梁": ["miao", "miao", "miao", "xian", "miao", "wang", "xian", "de", "miao", "xian", "miao", "wang"],
+    "七杀": ["miao", "wang", "miao", "ping", "wang", "miao", "miao", "miao", "miao", "ping", "wang", "miao"],
+    "破军": ["de", "xian", "wang", "ping", "miao", "wang", "de", "xian", "wang", "ping", "miao", "wang"],
+}
+
+_JU_DISPLAY = {2: "二", 3: "三", 4: "四", 5: "五", 6: "六"}
+
+MINOR_STAR_ORDER = [
+    "左辅", "右弼", "文昌", "文曲", "天魁", "天钺", "禄存", "天马",
+    "擎羊", "陀罗", "火星", "铃星", "地空", "地劫",
+]
+
 SEMANTIC_FILE = Path(__file__).with_name("knowledge_semantics.json")
 LOCATION_FILE = Path(__file__).with_name("cn_locations.json")
 
@@ -404,6 +439,26 @@ def palace_stems(year_stem: str) -> Dict[str, str]:
     return {branch: TIANGAN[(start_idx + i) % 10] for i, branch in enumerate(PALACE_BRANCHES)}
 
 
+def major_star_brightness(star_name: str, branch: str) -> Optional[str]:
+    codes = _MAJOR_STAR_BRIGHTNESS_CODES.get(star_name)
+    if not codes:
+        return None
+    try:
+        idx = PALACE_BRANCHES.index(branch)
+    except ValueError:
+        return None
+    code = codes[idx]
+    if not code:
+        return None
+    return _BRIGHTNESS_CODE_ZH.get(code, code)
+
+
+def _sort_palace_stars(palaces: List[Dict[str, Any]]) -> None:
+    minor_rank = {name: idx for idx, name in enumerate(MINOR_STAR_ORDER)}
+    for palace in palaces:
+        palace["minorStars"].sort(key=lambda star: minor_rank.get(star.get("name", ""), 999))
+
+
 def five_elements_class(stem: str, branch: str) -> Tuple[str, int]:
     stem_num = {"甲": 1, "乙": 1, "丙": 2, "丁": 2, "戊": 3, "己": 3, "庚": 4, "辛": 4, "壬": 5, "癸": 5}
     branch_num = {"子": 1, "丑": 1, "午": 1, "未": 1, "寅": 2, "卯": 2, "申": 2, "酉": 2, "辰": 3, "巳": 3, "戌": 3, "亥": 3}
@@ -414,7 +469,7 @@ def five_elements_class(stem: str, branch: str) -> Tuple[str, int]:
         total -= 5
     element = wuxing[total]
     num = ju_map[element]
-    return f"{element}{num}局", num
+    return f"{element}{_JU_DISPLAY[num]}局", num
 
 
 def ziwei_position(lunar_day: int, ju_num: int) -> str:
@@ -665,6 +720,9 @@ def generate_chart(
     star_mutagens = mutagen_by_star(year_stem)
     for star, branch in arrange_major_stars(ziwei).items():
         item = {"name": star, "description": MAJOR_STAR_DESCRIPTIONS.get(star, "")}
+        brightness = major_star_brightness(star, branch)
+        if brightness:
+            item["brightness"] = brightness
         if star in star_mutagens:
             item["mutagen"] = star_mutagens[star]
         _add_star_to_palaces(palaces, branch, item, "majorStars")
@@ -675,6 +733,7 @@ def generate_chart(
             item["mutagen"] = star_mutagens[star]
         _add_star_to_palaces(palaces, branch, item, "minorStars")
 
+    _sort_palace_stars(palaces)
     life_palace = next(p for p in palaces if p["name"] == "命宫")
     body_palace = next(p for p in palaces if p["isBodyPalace"])
     chart = {

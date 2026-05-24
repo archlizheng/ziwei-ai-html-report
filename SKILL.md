@@ -145,6 +145,12 @@ python3 tools/ziwei_offline.py \
 
 **数值口径（示意分，峰值稀缺）**：`tools/ziwei_offline.py` 先计算 1-100 岁 raw score，再做全生命相对映射；收盘上限约 **98**、最高可到 **100**（常量 `KLINE_CLOSE_CAP` / `KLINE_HIGH_CAP`），允许少数最强年份接近满分，但应避免长段贴顶。校验允许 ∈ [0,100]。
 
+**路径 A 亮度**：纯 Python 排盘会为主星写入 `庙/旺/得/利/平/不/陷` 亮度（对齐 iztro `STARS_INFO`），并用于 K 线评分与 HTML 排盘图展示。路径 B 仍可用于 App/iztro 对齐验证。
+
+**每条 `klineData` 含**：`age/year/ganZhi/daYun/daYunRange`、OHLC、`score`、`dimensions`（事业/财/情/健）、`yearlyMutagens`；合并 `kline-brief.json` 后可加 `brief`、可选 `reason`。
+
+**报告页交互**：`report-template.html` 在 K 线图下提供**悬停详情**与**可展开的 1–100 岁数值表**；用户无需另查 JSON 即可看每年数字与简评。流年长文仍在「年度流年运势」节。
+
 ## 产品对齐（历法与派别）
 
 与本目录规则基线一致（见 [`docs/rules-baseline.md`](docs/rules-baseline.md)）：**中州派**、正月初一分年/运限、`23:00` 晚子时换日。**不得**在未说明的情况下改用立春或其它流派。
@@ -184,7 +190,7 @@ python3 tools/ziwei_offline.py \
    - `age===1` 时 `open === 50`；
    - 对 `age>1`：`open` 与上一条 `close` 在数值上一致（容差 1e-6，或两位小数相等）；
    - `high >= max(open,close)`，`low <= min(open,close)`，且所有数值 ∈ [0,100]；满分附近应是少数高峰，勿人为改成长段顶格。
-7. **组装 HTML**：使用 `tools/generate_report.py` 与 [report-template.html](report-template.html) 组装；正式交付禁止 `--skip-validation`。页面顺序固定：**紫微排盘图** → **紫微命盘综合批注** → **流年运势** → **人生运势 K 线** → **数据完整性状态**。将命盘 JSON 填入 `script#chart-data`，将综合/流年正文填入对应 `#content-*`，将合并后的 K 线 JSON 嵌入 `script#kline-data`；页脚保留与提示词等价的**免责声明**。
+7. **组装 HTML**：使用 `tools/generate_report.py` 与 [report-template.html](report-template.html) 组装；正式交付禁止 `--skip-validation`。页面顺序固定：**紫微排盘图** → **紫微命盘综合批注** → **流年运势** → **人生运势 K 线**（含悬停/表格查每年 OHLC 与 brief）→ **数据完整性状态**。将命盘 JSON 填入 `script#chart-data`，将综合/流年正文填入对应 `#content-*`，将合并后的 K 线 JSON 嵌入 `script#kline-data`；页脚保留与提示词等价的**免责声明**。
 8. **输出**：向用户交付**完整** `<!DOCTYPE html>` 文档（可复制为 `.html` 文件后直接双击打开）。
 
 ## 运行模式

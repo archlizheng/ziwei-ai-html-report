@@ -2,11 +2,11 @@
   "version": "2",
   "promptsSource": "/Users/ethan/Project/ziwei-doushu/ziwei-ai-html-report/prompts.md",
   "payloadSummary": {
-    "solar": "1995-08-21",
+    "solar": "1996-01-06",
     "localTime": "11:40",
-    "gender": "male",
+    "gender": "female",
     "birthplace": "广东省深圳市",
-    "fiveElementsClass": "土5局",
+    "fiveElementsClass": "木3局",
     "targetYear": 2026,
     "hasKlineData": true
   },
@@ -20,11 +20,11 @@
   },
   "promptHashes": {
     "natal.system.md": "31f37b26727ed43fd760dc6dacc7a87d854146f06b2c5b935e89cd88c1fa870c",
-    "natal.user.md": "804ecd56d0b22e4879f6c6ceac6a13f8937e7d4640be6dd5d71ecfb5df1d0638",
+    "natal.user.md": "9bc119a4e255a4d28885adec7c0f5b214cea4e88354b6eb40d60ccf50a200339",
     "yearly.system.md": "4153d845bb001cf7a359a58834bbeb8e80406d974e99dc77ec18cb8458ba0f30",
-    "yearly.user.md": "1b99b4123c32f7b0be1cafd5f2cb87621700a098cfef1fb3df7ec0671e0f59fa",
+    "yearly.user.md": "8c488e1d8e9a53a10bf2a82591e268208e45afbe0e3304d2743facf9915c2663",
     "kline.system.md": "ea3b38100483de5d90f879792aa3232e600e2ec7100e947724e2edfd724eea9e",
-    "kline.user.md": "25011dd2fb9f021094c445c44037e65b4d6dda86ecac89f27377dccf80a6fa78"
+    "kline.user.md": "6aa434e3c5805da19a13dddb85f7756182676b76e72d01e83696b00fbb8d7c13"
   },
   "agentContract": {
     "description": "Agent 按 manifest 调用模型写综合/流年正文；K 线 OHLC 必须使用 payload.klineData。",

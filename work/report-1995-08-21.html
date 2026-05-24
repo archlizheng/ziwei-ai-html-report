@@ -180,6 +180,43 @@
     }
     .kline-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
     .sq { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+    #kline-detail {
+      margin-top: 0.65rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.22);
+      font-size: 0.86rem;
+      line-height: 1.55;
+      color: var(--text);
+      min-height: 3.2rem;
+    }
+    #kline-detail .muted { color: var(--muted); }
+    #kline-detail strong { color: var(--gold); font-weight: 600; }
+    .kline-table-wrap { margin-top: 0.65rem; font-size: 0.82rem; color: var(--muted); }
+    .kline-table-wrap summary { cursor: pointer; color: var(--gold-dim); }
+    .kline-table-scroll {
+      margin-top: 0.5rem;
+      max-height: 220px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    table.kline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    table.kline-table th,
+    table.kline-table td {
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.12);
+      text-align: left;
+      white-space: nowrap;
+    }
+    table.kline-table th { color: var(--gold-dim); font-weight: 500; position: sticky; top: 0; background: var(--panel); }
+    table.kline-table tr:hover td { background: rgba(201, 169, 98, 0.08); }
+    table.kline-table tr.active td { background: rgba(201, 169, 98, 0.14); }
     .integrity-list {
       margin: 0.5rem 0 0;
       padding-left: 1.2rem;
@@ -214,18 +251,18 @@
   <div class="wrap">
     <header class="report-header">
       <h1>紫微斗数 · AI 命盘报告</h1>
-      <p class="subtitle" id="meta-subtitle">生成时间 · <span id="meta-generated">2026-05-21 10:42:11</span></p>
+      <p class="subtitle" id="meta-subtitle">生成时间 · <span id="meta-generated">2026-05-22 17:41:25</span></p>
       <div class="meta-grid">
         <div><strong>阳历</strong> · <span id="meta-solar">1995-08-21</span></div>
         <div><strong>出生地</strong> · <span id="meta-birthplace">广东省深圳市</span></div>
         <div><strong>标准时间</strong> · <span id="meta-local-time">11:40</span></div>
         <div><strong>真太阳时</strong> · <span id="meta-true-solar-time">1995-08-21 11:13</span></div>
-        <div><strong>时间修正</strong> · <span id="meta-time-correction">-26.459分钟</span></div>
-        <div><strong>坐标来源</strong> · <span id="meta-geo-source">offline</span></div>
+        <div><strong>时间修正</strong> · <span id="meta-time-correction">-26.888分钟</span></div>
+        <div><strong>坐标来源</strong> · <span id="meta-geo-source">online</span></div>
         <div><strong>性别</strong> · <span id="meta-gender">男</span></div>
         <div><strong>五行局</strong> · <span id="meta-five">土5局</span></div>
         <div><strong>流年分析年</strong> · <span id="meta-target-year">2026</span></div>
-        <div><strong>年龄</strong> · <span id="meta-age">虚岁 32 岁（排大限） · 周岁 31 岁（截至2026-12-31） · 周岁 30 岁（截至2026-05-21）</span></div>
+        <div><strong>年龄</strong> · <span id="meta-age">虚岁 32 岁（排大限） · 周岁 31 岁（截至2026-12-31） · 周岁 30 岁（截至2026-05-22）</span></div>
       </div>
     </header>
 
@@ -314,7 +351,7 @@
     <section class="report-section" id="section-kline">
       <h2>人生运势 K 线（1–100 岁）</h2>
       <p class="prose" style="margin:0 0 0.75rem;color:var(--muted);font-size:0.88rem;">
-        竖轴为运势分 0–100；每根蜡烛为一年内开盘、收盘、最高、最低。数据由离线评分算法生成，模型仅用于补充文字解读。
+        竖轴为运势示意分（算法上限约 92，不顶满 100）；每根蜡烛为一年内开、收、高、低。悬停图表或展开下表可查看该岁完整数字与简评；详细流年批注见上文「年度流年运势」。
       </p>
       <div class="kline-wrap">
         <canvas id="kline-canvas" width="800" height="280" aria-label="人生运势K线图"></canvas>
@@ -324,6 +361,20 @@
           <span><i class="sq" style="background:var(--gold)"></i> 收盘趋势</span>
           <span id="kline-hint"></span>
         </div>
+        <div id="kline-detail" class="muted">将鼠标移到图表上查看该年 OHLC、四维分与简评</div>
+        <details class="kline-table-wrap">
+          <summary>展开 1–100 岁完整数值表（含 brief）</summary>
+          <div class="kline-table-scroll">
+            <table class="kline-table" id="kline-table">
+              <thead>
+                <tr>
+                  <th>岁</th><th>年</th><th>干支</th><th>开</th><th>收</th><th>高</th><th>低</th><th>均分</th><th>简评</th>
+                </tr>
+              </thead>
+              <tbody id="kline-table-body"></tbody>
+            </table>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -342,7 +393,7 @@
 
   <!-- Agent：将下文替换为长度为 100 的 JSON 数组；字段 age,open,close,high,low,brief（可选 reason、year） -->
   <script type="application/json" id="chart-data">{"birthSolar":"1995-08-21","fiveElementsClass":"土5局","lifePalaceName":"命宫（寅宫）","bodyPalaceName":"命宫（寅宫）","targetYear":"2026","palaces":[{"name":"命宫","branch":"寅","stem":"戊","majorStars":[],"minorStars":[{"name":"陀罗"}],"adjectiveStars":[],"isLifePalace":true,"isBodyPalace":true,"decadalRange":"5-14"},{"name":"兄弟宫","branch":"丑","stem":"己","majorStars":[],"minorStars":[],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"15-24"},{"name":"夫妻宫","branch":"子","stem":"戊","majorStars":[],"minorStars":[{"name":"天魁"}],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"25-34"},{"name":"子女宫","branch":"亥","stem":"丁","majorStars":[{"name":"紫微","description":"帝座之星，主尊贵、统御、格局。","mutagen":"化科"},{"name":"七杀","description":"将星，主开创、决断、波折。"}],"minorStars":[],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"35-44"},{"name":"财帛宫","branch":"戌","stem":"丙","majorStars":[{"name":"天机","description":"谋略之星，主机变、思虑、技术。","mutagen":"化禄"},{"name":"天梁","description":"荫寿之星，主护持、原则、长辈缘。","mutagen":"化权"}],"minorStars":[{"name":"左辅"},{"name":"文曲"}],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"45-54"},{"name":"疾厄宫","branch":"酉","stem":"乙","majorStars":[{"name":"天相","description":"印绶之星，主辅佐、制度、体面。"}],"minorStars":[],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"55-64"},{"name":"迁移宫","branch":"申","stem":"甲","majorStars":[{"name":"太阳","description":"光明之星，主名望、外显、助人。"},{"name":"巨门","description":"口舌暗曜，主表达、疑虑、是非。"}],"minorStars":[{"name":"天钺"}],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"65-74"},{"name":"交友宫","branch":"未","stem":"癸","majorStars":[{"name":"武曲","description":"财帛之星，主执行、理财、刚毅。"},{"name":"贪狼","description":"桃花才艺之星，主欲望、交际、才华。"}],"minorStars":[],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"75-84"},{"name":"官禄宫","branch":"午","stem":"壬","majorStars":[{"name":"天同","description":"福德之星，主温和、享受、人缘。"},{"name":"太阴","description":"阴柔之星，主财富、情感、细腻。","mutagen":"化忌"}],"minorStars":[],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"85-94"},{"name":"田宅宫","branch":"巳","stem":"辛","majorStars":[{"name":"天府","description":"库藏之星，主稳重、资源、包容。"}],"minorStars":[{"name":"地劫"},{"name":"地空"},{"name":"天马"}],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"95-104"},{"name":"福德宫","branch":"辰","stem":"庚","majorStars":[],"minorStars":[{"name":"右弼"},{"name":"文昌"},{"name":"擎羊"},{"name":"铃星"}],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"105-114"},{"name":"父母宫","branch":"卯","stem":"己","majorStars":[{"name":"廉贞","description":"囚杀之星，主原则、欲望、变化。"},{"name":"破军","description":"耗星，主破旧立新、变革、起伏。"}],"minorStars":[{"name":"禄存"},{"name":"火星"}],"adjectiveStars":[],"isLifePalace":false,"isBodyPalace":false,"decadalRange":"115-124"}]}</script>
-  <script type="application/json" id="kline-data">[{"age":1,"year":1995,"ganZhi":"乙亥","daYun":"童限","daYunRange":"1-4","open":50.0,"close":63.3,"high":69.3,"low":43.5,"score":57,"dimensions":{"career":56,"wealth":56,"relationship":37,"health":47},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"平稳向好"},{"age":2,"year":1996,"ganZhi":"丙子","daYun":"童限","daYunRange":"1-4","open":63.3,"close":55.0,"high":70.14,"low":47.85,"score":59,"dimensions":{"career":54,"wealth":42,"relationship":58,"health":53},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"波澜不惊"},{"age":3,"year":1997,"ganZhi":"丁丑","daYun":"童限","daYunRange":"1-4","open":55.0,"close":61.83,"high":68.56,"low":50.74,"score":59,"dimensions":{"career":66,"wealth":44,"relationship":36,"health":51},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"平稳向好"},{"age":4,"year":1998,"ganZhi":"戊寅","daYun":"童限","daYunRange":"1-4","open":61.83,"close":64.9,"high":70.17,"low":56.97,"score":63,"dimensions":{"career":70,"wealth":66,"relationship":46,"health":45},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"平稳向好"},{"age":5,"year":1999,"ganZhi":"己卯","daYun":"戊寅","daYunRange":"5-14","open":64.9,"close":76.4,"high":86.09,"low":53.83,"score":70,"dimensions":{"career":75,"wealth":74,"relationship":61,"health":58},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"稳中有进"},{"age":6,"year":2000,"ganZhi":"庚辰","daYun":"戊寅","daYunRange":"5-14","open":76.4,"close":62.03,"high":85.17,"low":52.46,"score":69,"dimensions":{"career":78,"wealth":70,"relationship":51,"health":55},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"平稳向好"},{"age":7,"year":2001,"ganZhi":"辛巳","daYun":"戊寅","daYunRange":"5-14","open":62.03,"close":65.74,"high":69.05,"low":60.19,"score":64,"dimensions":{"career":62,"wealth":61,"relationship":43,"health":56},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"平稳向好"},{"age":8,"year":2002,"ganZhi":"壬午","daYun":"戊寅","daYunRange":"5-14","open":65.74,"close":67.72,"high":73.09,"low":59.26,"score":66,"dimensions":{"career":65,"wealth":65,"relationship":58,"health":69},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"平稳向好"},{"age":9,"year":2003,"ganZhi":"癸未","daYun":"戊寅","daYunRange":"5-14","open":67.72,"close":66.77,"high":72.38,"low":62.58,"score":67,"dimensions":{"career":64,"wealth":61,"relationship":57,"health":52},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"平稳向好"},{"age":10,"year":2004,"ganZhi":"甲申","daYun":"戊寅","daYunRange":"5-14","open":66.77,"close":64.81,"high":73.92,"low":56.24,"score":65,"dimensions":{"career":71,"wealth":52,"relationship":60,"health":68},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"平稳向好"},{"age":11,"year":2005,"ganZhi":"乙酉","daYun":"戊寅","daYunRange":"5-14","open":64.81,"close":63.14,"high":69.0,"low":60.22,"score":64,"dimensions":{"career":63,"wealth":52,"relationship":58,"health":57},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"平稳向好"},{"age":12,"year":2006,"ganZhi":"丙戌","daYun":"戊寅","daYunRange":"5-14","open":63.14,"close":64.96,"high":74.36,"low":54.5,"score":64,"dimensions":{"career":65,"wealth":66,"relationship":62,"health":50},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"平稳向好"},{"age":13,"year":2007,"ganZhi":"丁亥","daYun":"戊寅","daYunRange":"5-14","open":64.96,"close":72.92,"high":80.34,"low":59.72,"score":69,"dimensions":{"career":80,"wealth":65,"relationship":53,"health":61},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"稳中有进"},{"age":14,"year":2008,"ganZhi":"戊子","daYun":"戊寅","daYunRange":"5-14","open":72.92,"close":75.14,"high":84.07,"low":64.96,"score":74,"dimensions":{"career":68,"wealth":61,"relationship":68,"health":77},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"稳中有进"},{"age":15,"year":2009,"ganZhi":"己丑","daYun":"己丑","daYunRange":"15-24","open":75.14,"close":68.6,"high":80.61,"low":64.47,"score":72,"dimensions":{"career":78,"wealth":73,"relationship":70,"health":68},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"平稳向好"},{"age":16,"year":2010,"ganZhi":"庚寅","daYun":"己丑","daYunRange":"15-24","open":68.6,"close":71.54,"high":77.9,"low":63.34,"score":70,"dimensions":{"career":65,"wealth":67,"relationship":70,"health":74},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"稳中有进"},{"age":17,"year":2011,"ganZhi":"辛卯","daYun":"己丑","daYunRange":"15-24","open":71.54,"close":69.24,"high":76.5,"low":64.28,"score":70,"dimensions":{"career":81,"wealth":69,"relationship":54,"health":56},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"平稳向好"},{"age":18,"year":2012,"ganZhi":"壬辰","daYun":"己丑","daYunRange":"15-24","open":69.24,"close":70.18,"high":79.05,"low":60.79,"score":70,"dimensions":{"career":77,"wealth":61,"relationship":68,"health":56},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"稳中有进"},{"age":19,"year":2013,"ganZhi":"癸巳","daYun":"己丑","daYunRange":"15-24","open":70.18,"close":73.44,"high":78.75,"low":64.06,"score":72,"dimensions":{"career":73,"wealth":76,"relationship":71,"health":62},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"稳中有进"},{"age":20,"year":2014,"ganZhi":"甲午","daYun":"己丑","daYunRange":"15-24","open":73.44,"close":70.38,"high":74.43,"low":69.05,"score":72,"dimensions":{"career":68,"wealth":67,"relationship":72,"health":59},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"稳中有进"},{"age":21,"year":2015,"ganZhi":"乙未","daYun":"己丑","daYunRange":"15-24","open":70.38,"close":76.58,"high":84.89,"low":63.53,"score":74,"dimensions":{"career":68,"wealth":76,"relationship":61,"health":60},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"稳中有进"},{"age":22,"year":2016,"ganZhi":"丙申","daYun":"己丑","daYunRange":"15-24","open":76.58,"close":81.36,"high":83.42,"low":72.96,"score":79,"dimensions":{"career":88,"wealth":87,"relationship":69,"health":69},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"诸事顺遂"},{"age":23,"year":2017,"ganZhi":"丁酉","daYun":"己丑","daYunRange":"15-24","open":81.36,"close":78.98,"high":86.4,"low":74.85,"score":80,"dimensions":{"career":81,"wealth":79,"relationship":72,"health":67},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"稳中有进"},{"age":24,"year":2018,"ganZhi":"戊戌","daYun":"己丑","daYunRange":"15-24","open":78.98,"close":80.67,"high":86.46,"low":73.86,"score":80,"dimensions":{"career":84,"wealth":85,"relationship":79,"health":75},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"诸事顺遂"},{"age":25,"year":2019,"ganZhi":"己亥","daYun":"戊子","daYunRange":"25-34","open":80.67,"close":80.05,"high":82.5,"low":78.46,"score":80,"dimensions":{"career":88,"wealth":72,"relationship":81,"health":75},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"诸事顺遂"},{"age":26,"year":2020,"ganZhi":"庚子","daYun":"戊子","daYunRange":"25-34","open":80.05,"close":81.1,"high":83.15,"low":77.61,"score":80,"dimensions":{"career":84,"wealth":89,"relationship":82,"health":70},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":27,"year":2021,"ganZhi":"辛丑","daYun":"戊子","daYunRange":"25-34","open":81.1,"close":76.31,"high":87.9,"low":69.7,"score":79,"dimensions":{"career":82,"wealth":74,"relationship":69,"health":65},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"稳中有进"},{"age":28,"year":2022,"ganZhi":"壬寅","daYun":"戊子","daYunRange":"25-34","open":76.31,"close":85.2,"high":88.21,"low":73.39,"score":81,"dimensions":{"career":82,"wealth":90,"relationship":85,"health":82},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"诸事顺遂"},{"age":29,"year":2023,"ganZhi":"癸卯","daYun":"戊子","daYunRange":"25-34","open":85.2,"close":86.77,"high":94.65,"low":78.64,"score":86,"dimensions":{"career":90,"wealth":81,"relationship":88,"health":78},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"诸事顺遂"},{"age":30,"year":2024,"ganZhi":"甲辰","daYun":"戊子","daYunRange":"25-34","open":86.77,"close":86.59,"high":93.84,"low":79.02,"score":87,"dimensions":{"career":94,"wealth":92,"relationship":75,"health":90},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"诸事顺遂"},{"age":31,"year":2025,"ganZhi":"乙巳","daYun":"戊子","daYunRange":"25-34","open":86.59,"close":91.47,"high":94.78,"low":84.54,"score":89,"dimensions":{"career":100,"wealth":93,"relationship":87,"health":95},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":32,"year":2026,"ganZhi":"丙午","daYun":"戊子","daYunRange":"25-34","open":91.47,"close":92.45,"high":94.31,"low":89.01,"score":92,"dimensions":{"career":100,"wealth":100,"relationship":86,"health":89},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":33,"year":2027,"ganZhi":"丁未","daYun":"戊子","daYunRange":"25-34","open":92.45,"close":85.73,"high":94.8,"low":81.3,"score":89,"dimensions":{"career":100,"wealth":93,"relationship":89,"health":98},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":34,"year":2028,"ganZhi":"戊申","daYun":"戊子","daYunRange":"25-34","open":85.73,"close":95.66,"high":100.0,"low":82.15,"score":91,"dimensions":{"career":95,"wealth":93,"relationship":87,"health":93},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":35,"year":2029,"ganZhi":"己酉","daYun":"丁亥","daYunRange":"35-44","open":95.66,"close":94.78,"high":100.0,"low":87.88,"score":95,"dimensions":{"career":100,"wealth":93,"relationship":100,"health":90},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":36,"year":2030,"ganZhi":"庚戌","daYun":"丁亥","daYunRange":"35-44","open":94.78,"close":96.74,"high":100.0,"low":90.3,"score":95,"dimensions":{"career":100,"wealth":100,"relationship":88,"health":88},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"运势巅峰"},{"age":37,"year":2031,"ganZhi":"辛亥","daYun":"丁亥","daYunRange":"35-44","open":96.74,"close":100.0,"high":100.0,"low":89.46,"score":97,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":38,"year":2032,"ganZhi":"壬子","daYun":"丁亥","daYunRange":"35-44","open":100.0,"close":93.38,"high":100.0,"low":92.5,"score":96,"dimensions":{"career":100,"wealth":95,"relationship":100,"health":100},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":39,"year":2033,"ganZhi":"癸丑","daYun":"丁亥","daYunRange":"35-44","open":93.38,"close":100.0,"high":100.0,"low":88.19,"score":95,"dimensions":{"career":100,"wealth":100,"relationship":99,"health":100},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":40,"year":2034,"ganZhi":"甲寅","daYun":"丁亥","daYunRange":"35-44","open":100.0,"close":100.0,"high":100.0,"low":92.68,"score":98,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":41,"year":2035,"ganZhi":"乙卯","daYun":"丁亥","daYunRange":"35-44","open":100.0,"close":92.65,"high":100.0,"low":83.78,"score":94,"dimensions":{"career":99,"wealth":96,"relationship":98,"health":100},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":42,"year":2036,"ganZhi":"丙辰","daYun":"丁亥","daYunRange":"35-44","open":92.65,"close":90.32,"high":98.37,"low":86.18,"score":92,"dimensions":{"career":100,"wealth":90,"relationship":98,"health":93},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":43,"year":2037,"ganZhi":"丁巳","daYun":"丁亥","daYunRange":"35-44","open":90.32,"close":95.33,"high":100.0,"low":79.66,"score":91,"dimensions":{"career":100,"wealth":91,"relationship":98,"health":84},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"运势巅峰"},{"age":44,"year":2038,"ganZhi":"戊午","daYun":"丁亥","daYunRange":"35-44","open":95.33,"close":92.36,"high":99.43,"low":86.38,"score":93,"dimensions":{"career":96,"wealth":95,"relationship":91,"health":93},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":45,"year":2039,"ganZhi":"己未","daYun":"丙戌","daYunRange":"45-54","open":92.36,"close":96.72,"high":100.0,"low":87.76,"score":94,"dimensions":{"career":100,"wealth":100,"relationship":99,"health":99},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":46,"year":2040,"ganZhi":"庚申","daYun":"丙戌","daYunRange":"45-54","open":96.72,"close":97.13,"high":100.0,"low":90.13,"score":96,"dimensions":{"career":100,"wealth":100,"relationship":98,"health":100},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"运势巅峰"},{"age":47,"year":2041,"ganZhi":"辛酉","daYun":"丙戌","daYunRange":"45-54","open":97.13,"close":100.0,"high":100.0,"low":89.96,"score":97,"dimensions":{"career":100,"wealth":95,"relationship":100,"health":96},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":48,"year":2042,"ganZhi":"壬戌","daYun":"丙戌","daYunRange":"45-54","open":100.0,"close":100.0,"high":100.0,"low":98.09,"score":100,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":49,"year":2043,"ganZhi":"癸亥","daYun":"丙戌","daYunRange":"45-54","open":100.0,"close":95.65,"high":100.0,"low":94.64,"score":98,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":92},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":50,"year":2044,"ganZhi":"甲子","daYun":"丙戌","daYunRange":"45-54","open":95.65,"close":95.11,"high":99.31,"low":90.71,"score":95,"dimensions":{"career":100,"wealth":100,"relationship":95,"health":100},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":51,"year":2045,"ganZhi":"乙丑","daYun":"丙戌","daYunRange":"45-54","open":95.11,"close":96.47,"high":100.0,"low":87.77,"score":95,"dimensions":{"career":100,"wealth":98,"relationship":89,"health":87},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":52,"year":2046,"ganZhi":"丙寅","daYun":"丙戌","daYunRange":"45-54","open":96.47,"close":98.89,"high":100.0,"low":94.01,"score":97,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":53,"year":2047,"ganZhi":"丁卯","daYun":"丙戌","daYunRange":"45-54","open":98.89,"close":100.0,"high":100.0,"low":96.07,"score":99,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"运势巅峰"},{"age":54,"year":2048,"ganZhi":"戊辰","daYun":"丙戌","daYunRange":"45-54","open":100.0,"close":95.38,"high":100.0,"low":87.34,"score":96,"dimensions":{"career":100,"wealth":100,"relationship":93,"health":100},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":55,"year":2049,"ganZhi":"己巳","daYun":"乙酉","daYunRange":"55-64","open":95.38,"close":91.78,"high":99.42,"low":89.48,"score":94,"dimensions":{"career":100,"wealth":100,"relationship":88,"health":100},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":56,"year":2050,"ganZhi":"庚午","daYun":"乙酉","daYunRange":"55-64","open":91.78,"close":87.22,"high":97.42,"low":83.42,"score":90,"dimensions":{"career":100,"wealth":100,"relationship":90,"health":82},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":57,"year":2051,"ganZhi":"辛未","daYun":"乙酉","daYunRange":"55-64","open":87.22,"close":97.69,"high":100.0,"low":84.95,"score":92,"dimensions":{"career":100,"wealth":100,"relationship":86,"health":89},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":58,"year":2052,"ganZhi":"壬申","daYun":"乙酉","daYunRange":"55-64","open":97.69,"close":100.0,"high":100.0,"low":94.05,"score":98,"dimensions":{"career":100,"wealth":97,"relationship":100,"health":94},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":59,"year":2053,"ganZhi":"癸酉","daYun":"乙酉","daYunRange":"55-64","open":100.0,"close":89.08,"high":100.0,"low":80.39,"score":92,"dimensions":{"career":100,"wealth":100,"relationship":85,"health":86},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"诸事顺遂"},{"age":60,"year":2054,"ganZhi":"甲戌","daYun":"乙酉","daYunRange":"55-64","open":89.08,"close":94.1,"high":100.0,"low":79.77,"score":91,"dimensions":{"career":100,"wealth":100,"relationship":79,"health":92},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":61,"year":2055,"ganZhi":"乙亥","daYun":"乙酉","daYunRange":"55-64","open":94.1,"close":86.24,"high":100.0,"low":80.73,"score":90,"dimensions":{"career":95,"wealth":99,"relationship":90,"health":96},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"诸事顺遂"},{"age":62,"year":2056,"ganZhi":"丙子","daYun":"乙酉","daYunRange":"55-64","open":86.24,"close":78.71,"high":91.38,"low":71.85,"score":82,"dimensions":{"career":87,"wealth":78,"relationship":85,"health":80},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"稳中有进"},{"age":63,"year":2057,"ganZhi":"丁丑","daYun":"乙酉","daYunRange":"55-64","open":78.71,"close":84.46,"high":92.27,"low":73.0,"score":82,"dimensions":{"career":95,"wealth":89,"relationship":68,"health":81},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":64,"year":2058,"ganZhi":"戊寅","daYun":"乙酉","daYunRange":"55-64","open":84.46,"close":88.26,"high":92.62,"low":80.5,"score":86,"dimensions":{"career":95,"wealth":81,"relationship":80,"health":94},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"诸事顺遂"},{"age":65,"year":2059,"ganZhi":"己卯","daYun":"甲申","daYunRange":"65-74","open":88.26,"close":99.77,"high":100.0,"low":85.46,"score":93,"dimensions":{"career":100,"wealth":100,"relationship":99,"health":100},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":66,"year":2060,"ganZhi":"庚辰","daYun":"甲申","daYunRange":"65-74","open":99.77,"close":96.21,"high":100.0,"low":91.88,"score":97,"dimensions":{"career":100,"wealth":100,"relationship":95,"health":95},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"运势巅峰"},{"age":67,"year":2061,"ganZhi":"辛巳","daYun":"甲申","daYunRange":"65-74","open":96.21,"close":100.0,"high":100.0,"low":91.55,"score":97,"dimensions":{"career":100,"wealth":94,"relationship":99,"health":100},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":68,"year":2062,"ganZhi":"壬午","daYun":"甲申","daYunRange":"65-74","open":100.0,"close":99.12,"high":100.0,"low":98.21,"score":99,"dimensions":{"career":100,"wealth":100,"relationship":97,"health":100},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":69,"year":2063,"ganZhi":"癸未","daYun":"甲申","daYunRange":"65-74","open":99.12,"close":100.0,"high":100.0,"low":97.46,"score":99,"dimensions":{"career":100,"wealth":100,"relationship":99,"health":100},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":70,"year":2064,"ganZhi":"甲申","daYun":"甲申","daYunRange":"65-74","open":100.0,"close":93.24,"high":100.0,"low":86.7,"score":95,"dimensions":{"career":100,"wealth":100,"relationship":95,"health":88},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":71,"year":2065,"ganZhi":"乙酉","daYun":"甲申","daYunRange":"65-74","open":93.24,"close":97.41,"high":100.0,"low":89.65,"score":95,"dimensions":{"career":99,"wealth":100,"relationship":84,"health":99},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":72,"year":2066,"ganZhi":"丙戌","daYun":"甲申","daYunRange":"65-74","open":97.41,"close":100.0,"high":100.0,"low":93.38,"score":98,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":73,"year":2067,"ganZhi":"丁亥","daYun":"甲申","daYunRange":"65-74","open":100.0,"close":100.0,"high":100.0,"low":97.8,"score":99,"dimensions":{"career":100,"wealth":100,"relationship":91,"health":100},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"运势巅峰"},{"age":74,"year":2068,"ganZhi":"戊子","daYun":"甲申","daYunRange":"65-74","open":100.0,"close":100.0,"high":100.0,"low":92.02,"score":98,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":75,"year":2069,"ganZhi":"己丑","daYun":"癸未","daYunRange":"75-84","open":100.0,"close":94.63,"high":100.0,"low":89.2,"score":96,"dimensions":{"career":100,"wealth":100,"relationship":94,"health":94},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":76,"year":2070,"ganZhi":"庚寅","daYun":"癸未","daYunRange":"75-84","open":94.63,"close":84.13,"high":100.0,"low":75.56,"score":89,"dimensions":{"career":95,"wealth":91,"relationship":94,"health":97},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":77,"year":2071,"ganZhi":"辛卯","daYun":"癸未","daYunRange":"75-84","open":84.13,"close":95.54,"high":100.0,"low":79.45,"score":90,"dimensions":{"career":99,"wealth":100,"relationship":77,"health":99},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":78,"year":2072,"ganZhi":"壬辰","daYun":"癸未","daYunRange":"75-84","open":95.54,"close":99.68,"high":100.0,"low":93.52,"score":97,"dimensions":{"career":100,"wealth":100,"relationship":97,"health":98},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":79,"year":2073,"ganZhi":"癸巳","daYun":"癸未","daYunRange":"75-84","open":99.68,"close":100.0,"high":100.0,"low":98.1,"score":99,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":96},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":80,"year":2074,"ganZhi":"甲午","daYun":"癸未","daYunRange":"75-84","open":100.0,"close":100.0,"high":100.0,"low":96.26,"score":99,"dimensions":{"career":100,"wealth":100,"relationship":100,"health":100},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":81,"year":2075,"ganZhi":"乙未","daYun":"癸未","daYunRange":"75-84","open":100.0,"close":100.0,"high":100.0,"low":94.88,"score":99,"dimensions":{"career":100,"wealth":98,"relationship":96,"health":100},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":82,"year":2076,"ganZhi":"丙申","daYun":"癸未","daYunRange":"75-84","open":100.0,"close":97.61,"high":100.0,"low":93.63,"score":98,"dimensions":{"career":100,"wealth":96,"relationship":96,"health":100},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":83,"year":2077,"ganZhi":"丁酉","daYun":"癸未","daYunRange":"75-84","open":97.61,"close":88.84,"high":100.0,"low":84.79,"score":93,"dimensions":{"career":100,"wealth":98,"relationship":100,"health":98},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":84,"year":2078,"ganZhi":"戊戌","daYun":"癸未","daYunRange":"75-84","open":88.84,"close":92.99,"high":99.67,"low":84.23,"score":91,"dimensions":{"career":100,"wealth":86,"relationship":91,"health":100},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":85,"year":2079,"ganZhi":"己亥","daYun":"壬午","daYunRange":"85-94","open":92.99,"close":89.32,"high":96.03,"low":84.48,"score":91,"dimensions":{"career":100,"wealth":92,"relationship":96,"health":85},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"诸事顺遂"},{"age":86,"year":2080,"ganZhi":"庚子","daYun":"壬午","daYunRange":"85-94","open":89.32,"close":86.7,"high":93.51,"low":84.23,"score":88,"dimensions":{"career":87,"wealth":97,"relationship":84,"health":76},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":87,"year":2081,"ganZhi":"辛丑","daYun":"壬午","daYunRange":"85-94","open":86.7,"close":74.27,"high":88.92,"low":71.95,"score":80,"dimensions":{"career":77,"wealth":88,"relationship":78,"health":78},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"稳中有进"},{"age":88,"year":2082,"ganZhi":"壬寅","daYun":"壬午","daYunRange":"85-94","open":74.27,"close":59.77,"high":84.15,"low":47.61,"score":66,"dimensions":{"career":59,"wealth":64,"relationship":51,"health":65},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"波澜不惊"},{"age":89,"year":2083,"ganZhi":"癸卯","daYun":"壬午","daYunRange":"85-94","open":59.77,"close":62.83,"high":75.09,"low":51.4,"score":62,"dimensions":{"career":67,"wealth":57,"relationship":54,"health":49},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"平稳向好"},{"age":90,"year":2084,"ganZhi":"甲辰","daYun":"壬午","daYunRange":"85-94","open":62.83,"close":71.7,"high":78.69,"low":58.51,"score":68,"dimensions":{"career":71,"wealth":54,"relationship":65,"health":51},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"稳中有进"},{"age":91,"year":2085,"ganZhi":"乙巳","daYun":"壬午","daYunRange":"85-94","open":71.7,"close":82.39,"high":84.39,"low":68.95,"score":77,"dimensions":{"career":78,"wealth":86,"relationship":72,"health":82},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"诸事顺遂"},{"age":92,"year":2086,"ganZhi":"丙午","daYun":"壬午","daYunRange":"85-94","open":82.39,"close":81.55,"high":87.06,"low":76.13,"score":82,"dimensions":{"career":91,"wealth":78,"relationship":78,"health":74},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"诸事顺遂"},{"age":93,"year":2087,"ganZhi":"丁未","daYun":"壬午","daYunRange":"85-94","open":81.55,"close":85.19,"high":85.73,"low":81.27,"score":83,"dimensions":{"career":92,"wealth":81,"relationship":70,"health":83},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":94,"year":2088,"ganZhi":"戊申","daYun":"壬午","daYunRange":"85-94","open":85.19,"close":82.35,"high":87.24,"low":80.74,"score":84,"dimensions":{"career":93,"wealth":88,"relationship":81,"health":78},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"诸事顺遂"},{"age":95,"year":2089,"ganZhi":"己酉","daYun":"辛巳","daYunRange":"95-104","open":82.35,"close":81.24,"high":86.26,"low":78.28,"score":82,"dimensions":{"career":85,"wealth":79,"relationship":74,"health":70},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"诸事顺遂"},{"age":96,"year":2090,"ganZhi":"庚戌","daYun":"辛巳","daYunRange":"95-104","open":81.24,"close":84.49,"high":91.94,"low":72.13,"score":82,"dimensions":{"career":81,"wealth":76,"relationship":84,"health":77},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":97,"year":2091,"ganZhi":"辛亥","daYun":"辛巳","daYunRange":"95-104","open":84.49,"close":85.43,"high":89.4,"low":78.74,"score":85,"dimensions":{"career":91,"wealth":83,"relationship":74,"health":92},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"诸事顺遂"},{"age":98,"year":2092,"ganZhi":"壬子","daYun":"辛巳","daYunRange":"95-104","open":85.43,"close":90.39,"high":96.85,"low":79.43,"score":88,"dimensions":{"career":100,"wealth":100,"relationship":76,"health":92},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":99,"year":2093,"ganZhi":"癸丑","daYun":"辛巳","daYunRange":"95-104","open":90.39,"close":82.75,"high":95.11,"low":78.18,"score":87,"dimensions":{"career":91,"wealth":81,"relationship":84,"health":94},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"诸事顺遂"},{"age":100,"year":2094,"ganZhi":"甲寅","daYun":"辛巳","daYunRange":"95-104","open":82.75,"close":85.58,"high":91.07,"low":78.05,"score":84,"dimensions":{"career":89,"wealth":94,"relationship":77,"health":84},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"诸事顺遂"}]</script>
+  <script type="application/json" id="kline-data">[{"age":1,"year":1995,"ganZhi":"乙亥","daYun":"童限","daYunRange":"1-4","open":50.0,"close":63.3,"high":66.25,"low":46.76,"score":57,"dimensions":{"career":56,"wealth":56,"relationship":37,"health":47},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"平稳向好"},{"age":2,"year":1996,"ganZhi":"丙子","daYun":"童限","daYunRange":"1-4","open":63.3,"close":55.0,"high":66.33,"low":51.82,"score":59,"dimensions":{"career":54,"wealth":42,"relationship":58,"health":53},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"波澜不惊"},{"age":3,"year":1997,"ganZhi":"丁丑","daYun":"童限","daYunRange":"1-4","open":55.0,"close":61.83,"high":64.98,"low":53.12,"score":59,"dimensions":{"career":66,"wealth":44,"relationship":36,"health":51},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"平稳向好"},{"age":4,"year":1998,"ganZhi":"戊寅","daYun":"童限","daYunRange":"1-4","open":61.83,"close":64.9,"high":67.12,"low":59.82,"score":63,"dimensions":{"career":70,"wealth":66,"relationship":46,"health":45},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"平稳向好"},{"age":5,"year":1999,"ganZhi":"己卯","daYun":"戊寅","daYunRange":"5-14","open":64.9,"close":76.4,"high":80.82,"low":59.78,"score":70,"dimensions":{"career":75,"wealth":74,"relationship":61,"health":58},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"稳中有进"},{"age":6,"year":2000,"ganZhi":"庚辰","daYun":"戊寅","daYunRange":"5-14","open":76.4,"close":62.03,"high":80.45,"low":57.56,"score":69,"dimensions":{"career":78,"wealth":70,"relationship":51,"health":55},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"平稳向好"},{"age":7,"year":2001,"ganZhi":"辛巳","daYun":"戊寅","daYunRange":"5-14","open":62.03,"close":65.74,"high":67.43,"low":61.16,"score":64,"dimensions":{"career":62,"wealth":61,"relationship":43,"health":56},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"平稳向好"},{"age":8,"year":2002,"ganZhi":"壬午","daYun":"戊寅","daYunRange":"5-14","open":65.74,"close":67.72,"high":70.03,"low":62.86,"score":67,"dimensions":{"career":65,"wealth":65,"relationship":58,"health":69},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"平稳向好"},{"age":9,"year":2003,"ganZhi":"癸未","daYun":"戊寅","daYunRange":"5-14","open":67.72,"close":66.77,"high":69.71,"low":65.01,"score":67,"dimensions":{"career":64,"wealth":61,"relationship":57,"health":52},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"平稳向好"},{"age":10,"year":2004,"ganZhi":"甲申","daYun":"戊寅","daYunRange":"5-14","open":66.77,"close":64.81,"high":69.83,"low":61.06,"score":66,"dimensions":{"career":71,"wealth":52,"relationship":60,"health":68},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"平稳向好"},{"age":11,"year":2005,"ganZhi":"乙酉","daYun":"戊寅","daYunRange":"5-14","open":64.81,"close":63.14,"high":66.74,"low":61.86,"score":64,"dimensions":{"career":63,"wealth":52,"relationship":58,"health":57},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"平稳向好"},{"age":12,"year":2006,"ganZhi":"丙戌","daYun":"戊寅","daYunRange":"5-14","open":63.14,"close":64.96,"high":69.48,"low":59.02,"score":64,"dimensions":{"career":65,"wealth":66,"relationship":62,"health":50},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"平稳向好"},{"age":13,"year":2007,"ganZhi":"丁亥","daYun":"戊寅","daYunRange":"5-14","open":64.96,"close":72.92,"high":76.52,"low":62.52,"score":69,"dimensions":{"career":80,"wealth":65,"relationship":53,"health":61},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"稳中有进"},{"age":14,"year":2008,"ganZhi":"戊子","daYun":"戊寅","daYunRange":"5-14","open":72.92,"close":75.14,"high":79.19,"low":69.35,"score":74,"dimensions":{"career":68,"wealth":61,"relationship":68,"health":77},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"稳中有进"},{"age":15,"year":2009,"ganZhi":"己丑","daYun":"己丑","daYunRange":"15-24","open":75.14,"close":68.6,"high":77.51,"low":66.88,"score":72,"dimensions":{"career":78,"wealth":73,"relationship":70,"health":68},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"平稳向好"},{"age":16,"year":2010,"ganZhi":"庚寅","daYun":"己丑","daYunRange":"15-24","open":68.6,"close":71.54,"high":74.34,"low":66.34,"score":70,"dimensions":{"career":65,"wealth":67,"relationship":70,"health":74},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"稳中有进"},{"age":17,"year":2011,"ganZhi":"辛卯","daYun":"己丑","daYunRange":"15-24","open":71.54,"close":69.24,"high":73.84,"low":66.94,"score":70,"dimensions":{"career":81,"wealth":69,"relationship":54,"health":56},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"平稳向好"},{"age":18,"year":2012,"ganZhi":"壬辰","daYun":"己丑","daYunRange":"15-24","open":69.24,"close":70.18,"high":74.19,"low":65.44,"score":70,"dimensions":{"career":77,"wealth":61,"relationship":68,"health":56},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"稳中有进"},{"age":19,"year":2013,"ganZhi":"癸巳","daYun":"己丑","daYunRange":"15-24","open":70.18,"close":73.44,"high":75.65,"low":67.57,"score":72,"dimensions":{"career":73,"wealth":76,"relationship":71,"health":62},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"稳中有进"},{"age":20,"year":2014,"ganZhi":"甲午","daYun":"己丑","daYunRange":"15-24","open":73.44,"close":70.38,"high":73.89,"low":69.75,"score":72,"dimensions":{"career":68,"wealth":67,"relationship":72,"health":59},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"稳中有进"},{"age":21,"year":2015,"ganZhi":"乙未","daYun":"己丑","daYunRange":"15-24","open":70.38,"close":76.58,"high":80.44,"low":67.28,"score":74,"dimensions":{"career":68,"wealth":76,"relationship":61,"health":60},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"稳中有进"},{"age":22,"year":2016,"ganZhi":"丙申","daYun":"己丑","daYunRange":"15-24","open":76.58,"close":81.36,"high":82.26,"low":74.88,"score":79,"dimensions":{"career":88,"wealth":87,"relationship":69,"health":69},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"诸事顺遂"},{"age":23,"year":2017,"ganZhi":"丁酉","daYun":"己丑","daYunRange":"15-24","open":81.36,"close":78.98,"high":83.6,"low":77.18,"score":80,"dimensions":{"career":81,"wealth":79,"relationship":72,"health":67},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"稳中有进"},{"age":24,"year":2018,"ganZhi":"戊戌","daYun":"己丑","daYunRange":"15-24","open":78.98,"close":80.67,"high":83.44,"low":76.57,"score":80,"dimensions":{"career":84,"wealth":85,"relationship":79,"health":75},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"诸事顺遂"},{"age":25,"year":2019,"ganZhi":"己亥","daYun":"戊子","daYunRange":"25-34","open":80.67,"close":80.05,"high":81.47,"low":79.37,"score":80,"dimensions":{"career":88,"wealth":72,"relationship":81,"health":75},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"诸事顺遂"},{"age":26,"year":2020,"ganZhi":"庚子","daYun":"戊子","daYunRange":"25-34","open":80.05,"close":81.1,"high":82.01,"low":78.94,"score":81,"dimensions":{"career":84,"wealth":89,"relationship":82,"health":70},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":27,"year":2021,"ganZhi":"辛丑","daYun":"戊子","daYunRange":"25-34","open":81.1,"close":76.31,"high":84.0,"low":73.51,"score":79,"dimensions":{"career":82,"wealth":74,"relationship":69,"health":65},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"稳中有进"},{"age":28,"year":2022,"ganZhi":"壬寅","daYun":"戊子","daYunRange":"25-34","open":76.31,"close":85.2,"high":86.53,"low":75.02,"score":81,"dimensions":{"career":82,"wealth":90,"relationship":85,"health":82},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"诸事顺遂"},{"age":29,"year":2023,"ganZhi":"癸卯","daYun":"戊子","daYunRange":"25-34","open":85.2,"close":86.77,"high":89.39,"low":82.38,"score":86,"dimensions":{"career":90,"wealth":81,"relationship":88,"health":78},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"诸事顺遂"},{"age":30,"year":2024,"ganZhi":"甲辰","daYun":"戊子","daYunRange":"25-34","open":86.77,"close":86.59,"high":89.38,"low":83.21,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":75,"health":90},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"诸事顺遂"},{"age":31,"year":2025,"ganZhi":"乙巳","daYun":"戊子","daYunRange":"25-34","open":86.59,"close":90.0,"high":91.0,"low":85.77,"score":88,"dimensions":{"career":92,"wealth":92,"relationship":86,"health":92},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":32,"year":2026,"ganZhi":"丙午","daYun":"戊子","daYunRange":"25-34","open":90.0,"close":90.0,"high":90.72,"low":89.01,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":84,"health":87},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":33,"year":2027,"ganZhi":"丁未","daYun":"戊子","daYunRange":"25-34","open":90.0,"close":84.29,"high":90.94,"low":82.34,"score":87,"dimensions":{"career":92,"wealth":90,"relationship":86,"health":92},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":34,"year":2028,"ganZhi":"戊申","daYun":"戊子","daYunRange":"25-34","open":84.29,"close":90.0,"high":91.0,"low":82.7,"score":87,"dimensions":{"career":90,"wealth":88,"relationship":83,"health":88},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":35,"year":2029,"ganZhi":"己酉","daYun":"丁亥","daYunRange":"35-44","open":90.0,"close":88.06,"high":91.0,"low":85.43,"score":89,"dimensions":{"career":92,"wealth":85,"relationship":92,"health":82},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":36,"year":2030,"ganZhi":"庚戌","daYun":"丁亥","daYunRange":"35-44","open":88.06,"close":88.54,"high":90.27,"low":86.29,"score":88,"dimensions":{"career":92,"wealth":92,"relationship":79,"health":79},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"运势巅峰"},{"age":37,"year":2031,"ganZhi":"辛亥","daYun":"丁亥","daYunRange":"35-44","open":88.54,"close":90.0,"high":91.0,"low":85.44,"score":89,"dimensions":{"career":89,"wealth":92,"relationship":90,"health":92},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":38,"year":2032,"ganZhi":"壬子","daYun":"丁亥","daYunRange":"35-44","open":90.0,"close":83.88,"high":90.54,"low":83.36,"score":87,"dimensions":{"career":86,"wealth":82,"relationship":91,"health":92},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":39,"year":2033,"ganZhi":"癸丑","daYun":"丁亥","daYunRange":"35-44","open":83.88,"close":90.0,"high":91.0,"low":81.4,"score":87,"dimensions":{"career":92,"wealth":92,"relationship":87,"health":92},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":40,"year":2034,"ganZhi":"甲寅","daYun":"丁亥","daYunRange":"35-44","open":90.0,"close":90.0,"high":91.0,"low":86.69,"score":89,"dimensions":{"career":92,"wealth":92,"relationship":92,"health":87},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":41,"year":2035,"ganZhi":"乙卯","daYun":"丁亥","daYunRange":"35-44","open":90.0,"close":83.06,"high":91.0,"low":79.01,"score":86,"dimensions":{"career":85,"wealth":83,"relationship":86,"health":91},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":42,"year":2036,"ganZhi":"丙辰","daYun":"丁亥","daYunRange":"35-44","open":83.06,"close":81.0,"high":85.77,"low":79.13,"score":82,"dimensions":{"career":87,"wealth":77,"relationship":86,"health":81},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":43,"year":2037,"ganZhi":"丁巳","daYun":"丁亥","daYunRange":"35-44","open":81.0,"close":86.17,"high":89.08,"low":76.05,"score":83,"dimensions":{"career":87,"wealth":79,"relationship":86,"health":72},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"运势巅峰"},{"age":44,"year":2038,"ganZhi":"戊午","daYun":"丁亥","daYunRange":"35-44","open":86.17,"close":83.29,"high":87.9,"low":80.61,"score":84,"dimensions":{"career":83,"wealth":83,"relationship":79,"health":81},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":45,"year":2039,"ganZhi":"己未","daYun":"丙戌","daYunRange":"45-54","open":83.29,"close":87.69,"high":89.59,"low":81.08,"score":85,"dimensions":{"career":91,"wealth":92,"relationship":87,"health":87},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":46,"year":2040,"ganZhi":"庚申","daYun":"丙戌","daYunRange":"45-54","open":87.69,"close":88.11,"high":90.06,"low":84.83,"score":88,"dimensions":{"career":92,"wealth":91,"relationship":87,"health":92},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"运势巅峰"},{"age":47,"year":2041,"ganZhi":"辛酉","daYun":"丙戌","daYunRange":"45-54","open":88.11,"close":90.0,"high":91.0,"low":84.87,"score":88,"dimensions":{"career":92,"wealth":82,"relationship":92,"health":84},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":48,"year":2042,"ganZhi":"壬戌","daYun":"丙戌","daYunRange":"45-54","open":90.0,"close":90.0,"high":91.0,"low":89.14,"score":90,"dimensions":{"career":92,"wealth":88,"relationship":92,"health":87},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":49,"year":2043,"ganZhi":"癸亥","daYun":"丙戌","daYunRange":"45-54","open":90.0,"close":86.24,"high":90.81,"low":85.72,"score":88,"dimensions":{"career":92,"wealth":92,"relationship":92,"health":80},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":50,"year":2044,"ganZhi":"甲子","daYun":"丙戌","daYunRange":"45-54","open":86.24,"close":85.82,"high":87.93,"low":83.75,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":83,"health":92},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":51,"year":2045,"ganZhi":"乙丑","daYun":"丙戌","daYunRange":"45-54","open":85.82,"close":87.28,"high":89.64,"low":82.52,"score":86,"dimensions":{"career":92,"wealth":85,"relationship":77,"health":75},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":52,"year":2046,"ganZhi":"丙寅","daYun":"丙戌","daYunRange":"45-54","open":87.28,"close":89.8,"high":90.43,"low":86.08,"score":88,"dimensions":{"career":92,"wealth":92,"relationship":92,"health":92},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":53,"year":2047,"ganZhi":"丁卯","daYun":"丙戌","daYunRange":"45-54","open":89.8,"close":90.0,"high":91.0,"low":88.56,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":88,"health":92},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"运势巅峰"},{"age":54,"year":2048,"ganZhi":"戊辰","daYun":"丙戌","daYunRange":"45-54","open":90.0,"close":85.91,"high":91.0,"low":82.24,"score":87,"dimensions":{"career":88,"wealth":92,"relationship":80,"health":87},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":55,"year":2049,"ganZhi":"己巳","daYun":"乙酉","daYunRange":"55-64","open":85.91,"close":86.78,"high":87.58,"low":85.49,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":79,"health":92},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":56,"year":2050,"ganZhi":"庚午","daYun":"乙酉","daYunRange":"55-64","open":86.78,"close":83.96,"high":89.39,"low":82.02,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":85,"health":77},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":57,"year":2051,"ganZhi":"辛未","daYun":"乙酉","daYunRange":"55-64","open":83.96,"close":90.0,"high":91.0,"low":82.92,"score":87,"dimensions":{"career":92,"wealth":92,"relationship":79,"health":82},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":58,"year":2052,"ganZhi":"壬申","daYun":"乙酉","daYunRange":"55-64","open":90.0,"close":90.0,"high":90.98,"low":88.55,"score":90,"dimensions":{"career":92,"wealth":85,"relationship":92,"health":83},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":59,"year":2053,"ganZhi":"癸酉","daYun":"乙酉","daYunRange":"55-64","open":90.0,"close":85.41,"high":91.0,"low":82.58,"score":87,"dimensions":{"career":92,"wealth":92,"relationship":76,"health":77},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"诸事顺遂"},{"age":60,"year":2054,"ganZhi":"甲戌","daYun":"乙酉","daYunRange":"55-64","open":85.41,"close":88.56,"high":90.28,"low":81.66,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":73,"health":86},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":61,"year":2055,"ganZhi":"乙亥","daYun":"乙酉","daYunRange":"55-64","open":88.56,"close":82.79,"high":90.28,"low":80.89,"score":86,"dimensions":{"career":88,"wealth":92,"relationship":85,"health":90},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"诸事顺遂"},{"age":62,"year":2056,"ganZhi":"丙子","daYun":"乙酉","daYunRange":"55-64","open":82.79,"close":77.23,"high":84.66,"low":74.63,"score":80,"dimensions":{"career":84,"wealth":75,"relationship":82,"health":77},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"稳中有进"},{"age":63,"year":2057,"ganZhi":"丁丑","daYun":"乙酉","daYunRange":"55-64","open":77.23,"close":83.48,"high":87.35,"low":74.5,"score":81,"dimensions":{"career":92,"wealth":88,"relationship":67,"health":80},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":64,"year":2058,"ganZhi":"戊寅","daYun":"乙酉","daYunRange":"55-64","open":83.48,"close":87.65,"high":89.56,"low":81.77,"score":86,"dimensions":{"career":92,"wealth":79,"relationship":79,"health":92},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"诸事顺遂"},{"age":65,"year":2059,"ganZhi":"己卯","daYun":"甲申","daYunRange":"65-74","open":87.65,"close":90.0,"high":91.0,"low":87.01,"score":89,"dimensions":{"career":92,"wealth":92,"relationship":92,"health":92},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":66,"year":2060,"ganZhi":"庚辰","daYun":"甲申","daYunRange":"65-74","open":90.0,"close":89.08,"high":91.0,"low":87.79,"score":89,"dimensions":{"career":92,"wealth":92,"relationship":84,"health":84},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"运势巅峰"},{"age":67,"year":2061,"ganZhi":"辛巳","daYun":"甲申","daYunRange":"65-74","open":89.08,"close":90.0,"high":91.0,"low":87.21,"score":89,"dimensions":{"career":92,"wealth":82,"relationship":88,"health":92},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":68,"year":2062,"ganZhi":"壬午","daYun":"甲申","daYunRange":"65-74","open":90.0,"close":89.7,"high":90.51,"low":89.24,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":85,"health":92},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":69,"year":2063,"ganZhi":"癸未","daYun":"甲申","daYunRange":"65-74","open":89.7,"close":90.0,"high":90.8,"low":88.96,"score":90,"dimensions":{"career":92,"wealth":89,"relationship":87,"health":92},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":70,"year":2064,"ganZhi":"甲申","daYun":"甲申","daYunRange":"65-74","open":90.0,"close":83.57,"high":91.0,"low":80.53,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":82,"health":75},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":71,"year":2065,"ganZhi":"乙酉","daYun":"甲申","daYunRange":"65-74","open":83.57,"close":88.5,"high":90.19,"low":81.87,"score":86,"dimensions":{"career":86,"wealth":92,"relationship":72,"health":87},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":72,"year":2066,"ganZhi":"丙戌","daYun":"甲申","daYunRange":"65-74","open":88.5,"close":90.0,"high":91.0,"low":86.8,"score":89,"dimensions":{"career":92,"wealth":92,"relationship":88,"health":92},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":73,"year":2067,"ganZhi":"丁亥","daYun":"甲申","daYunRange":"65-74","open":90.0,"close":90.0,"high":91.0,"low":89.01,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":79,"health":92},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"运势巅峰"},{"age":74,"year":2068,"ganZhi":"戊子","daYun":"甲申","daYunRange":"65-74","open":90.0,"close":90.0,"high":91.0,"low":86.5,"score":89,"dimensions":{"career":91,"wealth":92,"relationship":92,"health":92},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":75,"year":2069,"ganZhi":"己丑","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":90.0,"high":91.0,"low":88.59,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":84,"health":85},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"运势巅峰"},{"age":76,"year":2070,"ganZhi":"庚寅","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":82.45,"high":91.0,"low":79.19,"score":86,"dimensions":{"career":91,"wealth":86,"relationship":90,"health":92},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":77,"year":2071,"ganZhi":"辛卯","daYun":"癸未","daYunRange":"75-84","open":82.45,"close":90.0,"high":91.0,"low":80.58,"score":86,"dimensions":{"career":92,"wealth":92,"relationship":72,"health":92},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"运势巅峰"},{"age":78,"year":2072,"ganZhi":"壬辰","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":90.0,"high":90.96,"low":89.22,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":87,"health":88},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":79,"year":2073,"ganZhi":"癸巳","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":90.0,"high":90.62,"low":89.3,"score":90,"dimensions":{"career":92,"wealth":92,"relationship":92,"health":83},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"运势巅峰"},{"age":80,"year":2074,"ganZhi":"甲午","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":90.0,"high":91.0,"low":88.3,"score":90,"dimensions":{"career":90,"wealth":92,"relationship":91,"health":92},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"运势巅峰"},{"age":81,"year":2075,"ganZhi":"乙未","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":90.0,"high":91.0,"low":87.63,"score":90,"dimensions":{"career":92,"wealth":85,"relationship":83,"health":92},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"运势巅峰"},{"age":82,"year":2076,"ganZhi":"丙申","daYun":"癸未","daYunRange":"75-84","open":90.0,"close":87.98,"high":91.0,"low":86.07,"score":89,"dimensions":{"career":92,"wealth":83,"relationship":84,"health":92},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"运势巅峰"},{"age":83,"year":2077,"ganZhi":"丁酉","daYun":"癸未","daYunRange":"75-84","open":87.98,"close":82.78,"high":89.99,"low":81.1,"score":85,"dimensions":{"career":92,"wealth":88,"relationship":91,"health":88},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":84,"year":2078,"ganZhi":"戊戌","daYun":"癸未","daYunRange":"75-84","open":82.78,"close":85.51,"high":88.32,"low":80.92,"score":84,"dimensions":{"career":92,"wealth":76,"relationship":82,"health":92},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"运势巅峰"},{"age":85,"year":2079,"ganZhi":"己亥","daYun":"壬午","daYunRange":"85-94","open":85.51,"close":85.29,"high":86.28,"low":83.99,"score":85,"dimensions":{"career":92,"wealth":84,"relationship":89,"health":77},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"诸事顺遂"},{"age":86,"year":2080,"ganZhi":"庚子","daYun":"壬午","daYunRange":"85-94","open":85.29,"close":84.55,"high":86.96,"low":83.63,"score":85,"dimensions":{"career":83,"wealth":92,"relationship":80,"health":72},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":87,"year":2081,"ganZhi":"辛丑","daYun":"壬午","daYunRange":"85-94","open":84.55,"close":72.96,"high":85.49,"low":71.96,"score":79,"dimensions":{"career":75,"wealth":85,"relationship":75,"health":76},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"稳中有进"},{"age":88,"year":2082,"ganZhi":"壬寅","daYun":"壬午","daYunRange":"85-94","open":72.96,"close":59.18,"high":77.32,"low":53.68,"score":66,"dimensions":{"career":58,"wealth":63,"relationship":50,"health":64},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"波澜不惊"},{"age":89,"year":2083,"ganZhi":"癸卯","daYun":"壬午","daYunRange":"85-94","open":59.18,"close":62.47,"high":68.33,"low":55.37,"score":61,"dimensions":{"career":66,"wealth":56,"relationship":53,"health":49},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"平稳向好"},{"age":90,"year":2084,"ganZhi":"甲辰","daYun":"壬午","daYunRange":"85-94","open":62.47,"close":71.5,"high":74.99,"low":60.44,"score":67,"dimensions":{"career":71,"wealth":53,"relationship":64,"health":50},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"稳中有进"},{"age":91,"year":2085,"ganZhi":"乙巳","daYun":"壬午","daYunRange":"85-94","open":71.5,"close":82.28,"high":83.28,"low":70.07,"score":77,"dimensions":{"career":77,"wealth":86,"relationship":72,"health":82},"yearlyMutagens":["天机化禄","天梁化权","紫微化科","太阴化忌"],"brief":"诸事顺遂"},{"age":92,"year":2086,"ganZhi":"丙午","daYun":"壬午","daYunRange":"85-94","open":82.28,"close":81.51,"high":84.25,"low":79.18,"score":82,"dimensions":{"career":91,"wealth":78,"relationship":78,"health":74},"yearlyMutagens":["天同化禄","天机化权","文昌化科","廉贞化忌"],"brief":"诸事顺遂"},{"age":93,"year":2087,"ganZhi":"丁未","daYun":"壬午","daYunRange":"85-94","open":81.51,"close":85.18,"high":85.44,"low":81.38,"score":83,"dimensions":{"career":92,"wealth":81,"relationship":70,"health":83},"yearlyMutagens":["太阴化禄","天同化权","天机化科","巨门化忌"],"brief":"诸事顺遂"},{"age":94,"year":2088,"ganZhi":"戊申","daYun":"壬午","daYunRange":"85-94","open":85.18,"close":82.35,"high":86.06,"low":81.68,"score":84,"dimensions":{"career":92,"wealth":88,"relationship":81,"health":78},"yearlyMutagens":["贪狼化禄","太阴化权","右弼化科","天机化忌"],"brief":"诸事顺遂"},{"age":95,"year":2089,"ganZhi":"己酉","daYun":"辛巳","daYunRange":"95-104","open":82.35,"close":81.24,"high":84.14,"low":79.94,"score":82,"dimensions":{"career":85,"wealth":79,"relationship":74,"health":70},"yearlyMutagens":["武曲化禄","贪狼化权","天梁化科","文曲化忌"],"brief":"诸事顺遂"},{"age":96,"year":2090,"ganZhi":"庚戌","daYun":"辛巳","daYunRange":"95-104","open":81.24,"close":83.77,"high":87.06,"low":77.13,"score":82,"dimensions":{"career":80,"wealth":75,"relationship":83,"health":77},"yearlyMutagens":["太阳化禄","武曲化权","太阴化科","天同化忌"],"brief":"诸事顺遂"},{"age":97,"year":2091,"ganZhi":"辛亥","daYun":"辛巳","daYunRange":"95-104","open":83.77,"close":85.17,"high":86.95,"low":81.07,"score":84,"dimensions":{"career":91,"wealth":83,"relationship":74,"health":91},"yearlyMutagens":["巨门化禄","太阳化权","文曲化科","文昌化忌"],"brief":"诸事顺遂"},{"age":98,"year":2092,"ganZhi":"壬子","daYun":"辛巳","daYunRange":"95-104","open":85.17,"close":90.0,"high":91.0,"low":82.53,"score":87,"dimensions":{"career":92,"wealth":92,"relationship":76,"health":91},"yearlyMutagens":["天梁化禄","紫微化权","左辅化科","武曲化忌"],"brief":"运势巅峰"},{"age":99,"year":2093,"ganZhi":"癸丑","daYun":"辛巳","daYunRange":"95-104","open":90.0,"close":82.5,"high":91.0,"low":80.35,"score":86,"dimensions":{"career":91,"wealth":81,"relationship":83,"health":92},"yearlyMutagens":["破军化禄","巨门化权","太阴化科","贪狼化忌"],"brief":"诸事顺遂"},{"age":100,"year":2094,"ganZhi":"甲寅","daYun":"辛巳","daYunRange":"95-104","open":82.5,"close":85.45,"high":88.07,"low":80.29,"score":84,"dimensions":{"career":88,"wealth":92,"relationship":77,"health":84},"yearlyMutagens":["廉贞化禄","破军化权","武曲化科","太阳化忌"],"brief":"诸事顺遂"}]</script>
 
   <script>
 (function () {
@@ -455,6 +506,89 @@
     wrap.innerHTML = html;
   }
 
+  var klinePick = { padL: 40, gw: 0, n: 0, sorted: [] };
+
+  function sortedKlineRows(data) {
+    return data.slice().sort(function (a, b) { return Number(a.age) - Number(b.age); });
+  }
+
+  function renderKlineDetail(row) {
+    var el = document.getElementById('kline-detail');
+    if (!el) return;
+    if (!row) {
+      el.innerHTML = '<span class="muted">将鼠标移到图表上查看该年 OHLC、四维分与简评</span>';
+      return;
+    }
+    var dims = row.dimensions || {};
+    var mut = Array.isArray(row.yearlyMutagens) ? row.yearlyMutagens.join(' · ') : '';
+    var brief = row.brief ? String(row.brief) : '（暂无简评）';
+    var reason = row.reason ? '<p class="muted" style="margin:0.35rem 0 0;">' + row.reason + '</p>' : '';
+    el.innerHTML =
+      '<p style="margin:0;"><strong>' + row.age + ' 岁 · ' + (row.year || '-') + ' 年 ' + (row.ganZhi || '') + '</strong>'
+      + ' · 大限 ' + (row.daYunRange || row.daYun || '-') + '</p>'
+      + '<p style="margin:0.35rem 0 0;">开 <strong>' + row.open + '</strong> · 收 <strong>' + row.close + '</strong>'
+      + ' · 高 <strong>' + row.high + '</strong> · 低 <strong>' + row.low + '</strong>'
+      + ' · 年均 <strong>' + (row.score != null ? row.score : '-') + '</strong></p>'
+      + '<p class="muted" style="margin:0.25rem 0 0;">事业 ' + (dims.career != null ? dims.career : '-')
+      + ' · 财 ' + (dims.wealth != null ? dims.wealth : '-')
+      + ' · 情 ' + (dims.relationship != null ? dims.relationship : '-')
+      + ' · 健 ' + (dims.health != null ? dims.health : '-') + '</p>'
+      + (mut ? '<p class="muted" style="margin:0.25rem 0 0;">流年四化：' + mut + '</p>' : '')
+      + '<p style="margin:0.35rem 0 0;">简评：' + brief + '</p>' + reason;
+  }
+
+  function renderKlineTable(rows) {
+    var body = document.getElementById('kline-table-body');
+    if (!body) return;
+    body.innerHTML = '';
+    rows.forEach(function (row) {
+      var tr = document.createElement('tr');
+      tr.dataset.age = String(row.age);
+      tr.innerHTML =
+        '<td>' + row.age + '</td><td>' + (row.year || '') + '</td><td>' + (row.ganZhi || '') + '</td>'
+        + '<td>' + row.open + '</td><td>' + row.close + '</td><td>' + row.high + '</td><td>' + row.low + '</td>'
+        + '<td>' + (row.score != null ? row.score : '') + '</td><td>' + (row.brief || '') + '</td>';
+      tr.addEventListener('mouseenter', function () {
+        highlightKlineRow(row.age);
+        renderKlineDetail(row);
+      });
+      body.appendChild(tr);
+    });
+  }
+
+  function highlightKlineRow(age) {
+    var body = document.getElementById('kline-table-body');
+    if (!body) return;
+    Array.prototype.forEach.call(body.querySelectorAll('tr'), function (tr) {
+      tr.classList.toggle('active', String(tr.dataset.age) === String(age));
+    });
+  }
+
+  function pickKlineRowFromX(canvas, clientX) {
+    if (!klinePick.n) return null;
+    var rect = canvas.getBoundingClientRect();
+    var x = clientX - rect.left;
+    var rel = (x - klinePick.padL) / Math.max(klinePick.gw, 1);
+    var idx = Math.round(rel * (klinePick.n - 1));
+    idx = Math.max(0, Math.min(klinePick.n - 1, idx));
+    return klinePick.sorted[idx] || null;
+  }
+
+  function bindKlineCanvas(canvas) {
+    if (!canvas || canvas.dataset.klineBound === '1') return;
+    canvas.dataset.klineBound = '1';
+    canvas.addEventListener('mousemove', function (ev) {
+      var row = pickKlineRowFromX(canvas, ev.clientX);
+      if (row) {
+        renderKlineDetail(row);
+        highlightKlineRow(row.age);
+      }
+    });
+    canvas.addEventListener('mouseleave', function () {
+      highlightKlineRow(null);
+    });
+  }
+
   function drawKLine() {
     var canvas = document.getElementById('kline-canvas');
     var hint = document.getElementById('kline-hint');
@@ -475,23 +609,63 @@
     var padL = 40, padR = 12, padT = 14, padB = 28;
     var gw = cw - padL - padR;
     var gh = ch - padT - padB;
+    var plotInset = Math.max(10, Math.round(gh * 0.08));
+    var plotTop = padT + plotInset;
+    var plotBottom = padT + gh - plotInset;
+    var plotH = plotBottom - plotTop;
+    var yMin = 0;
+    var yMax = 100;
+
+    function xPos(i, total) {
+      if (total <= 1) return Math.round(padL + gw / 2);
+      return Math.round(padL + (i / (total - 1)) * gw);
+    }
+
+    function strokeY(y) {
+      return Math.round(y) + 0.5;
+    }
+
+    function niceFloor(v) {
+      return Math.max(0, Math.floor(v / 5) * 5);
+    }
+
+    function niceCeil(v) {
+      return Math.min(100, Math.ceil(v / 5) * 5);
+    }
+
+    function computeYDomain(rows) {
+      var lo = Infinity;
+      var hi = -Infinity;
+      rows.forEach(function (row) {
+        ['open', 'close', 'high', 'low'].forEach(function (key) {
+          var n = Number(row[key]);
+          if (n !== n) return;
+          lo = Math.min(lo, n);
+          hi = Math.max(hi, n);
+        });
+      });
+      if (lo === Infinity) return { min: 0, max: 100 };
+      var minV = niceFloor(lo - 5);
+      var maxV = niceCeil(hi + 5);
+      if (maxV - minV < 30) {
+        var mid = (maxV + minV) / 2;
+        minV = niceFloor(mid - 15);
+        maxV = niceCeil(mid + 15);
+      }
+      minV = Math.max(0, minV);
+      maxV = Math.min(100, maxV);
+      if (maxV <= minV) maxV = Math.min(100, minV + 30);
+      return { min: minV, max: maxV };
+    }
+
+    function yScale(v) {
+      var clamped = Math.min(yMax, Math.max(yMin, Number(v)));
+      if (clamped !== clamped) clamped = (yMin + yMax) / 2;
+      return plotBottom - ((clamped - yMin) / (yMax - yMin)) * plotH;
+    }
 
     ctx.fillStyle = 'rgba(0,0,0,0)';
     ctx.fillRect(0, 0, cw, ch);
-
-    ctx.strokeStyle = 'rgba(201,169,98,0.15)';
-    ctx.lineWidth = 1;
-    for (var li = 0; li <= 4; li++) {
-      var y = padT + (gh / 4) * li;
-      ctx.beginPath();
-      ctx.moveTo(padL, y);
-      ctx.lineTo(cw - padR, y);
-      ctx.stroke();
-      ctx.fillStyle = '#9a9288';
-      ctx.font = '11px system-ui,sans-serif';
-      var val = 100 - li * 25;
-      ctx.fillText(String(val), 4, y + 4);
-    }
 
     if (data.length === 0) {
       ctx.fillStyle = '#9a9288';
@@ -501,28 +675,31 @@
       return;
     }
 
+    var domain = computeYDomain(data);
+    yMin = domain.min;
+    yMax = domain.max;
+
+    ctx.strokeStyle = 'rgba(201,169,98,0.15)';
+    ctx.lineWidth = 1;
+    for (var li = 0; li <= 4; li++) {
+      var tickVal = yMax - ((yMax - yMin) * li) / 4;
+      var y = strokeY(yScale(tickVal));
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(cw - padR, y);
+      ctx.stroke();
+      ctx.fillStyle = '#9a9288';
+      ctx.font = '11px system-ui,sans-serif';
+      ctx.fillText(String(Math.round(tickVal)), 4, y + 4);
+    }
+
     var n = data.length;
     var slot = gw / Math.max(n, 1);
 
-    function yScale(v) {
-      return padT + gh - (v / 100) * gh;
-    }
-
     ctx.save();
-    ctx.strokeStyle = 'rgba(201,169,98,0.42)';
-    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    data.forEach(function (row, i) {
-      var close = Number(row.close);
-      if (close !== close) close = 50;
-      close = Math.min(100, Math.max(0, close));
-      var x = padL + (n === 1 ? gw / 2 : (i / (n - 1)) * gw);
-      var y = yScale(close);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-    ctx.restore();
+    ctx.rect(padL, plotTop, gw, plotH);
+    ctx.clip();
 
     data.forEach(function (row, i) {
       var open = Number(row.open);
@@ -539,35 +716,61 @@
       open = Math.min(100, Math.max(0, open));
       close = Math.min(100, Math.max(0, close));
 
-      var cx = padL + (n === 1 ? gw / 2 : (i / (n - 1)) * gw);
-      var bw = Math.max(2, Math.min(4, slot * 0.45));
+      var cx = xPos(i, n);
+      var bw = Math.max(2, Math.min(4, Math.round(slot * 0.45)));
+      var bull = close >= open;
+      var strokeColor = bull ? '#6b9e78' : '#a65d5d';
+      var bodyColor = bull ? 'rgba(107,158,120,0.95)' : 'rgba(166,93,93,0.95)';
 
-      var isBoundary = i === 0 || (row.daYunRange && data[i - 1] && row.daYunRange !== data[i - 1].daYunRange);
-      if (isBoundary) {
-        ctx.strokeStyle = 'rgba(201,169,98,0.24)';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([3, 4]);
-        ctx.beginPath();
-        ctx.moveTo(cx, padT);
-        ctx.lineTo(cx, padT + gh);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-
-      ctx.strokeStyle = close >= open ? 'rgba(107,158,120,0.38)' : 'rgba(166,93,93,0.38)';
-      ctx.lineWidth = isBoundary ? 1.2 : 0.6;
-      ctx.beginPath();
-      ctx.moveTo(cx, yScale(high));
-      ctx.lineTo(cx, yScale(low));
-      ctx.stroke();
-
+      var yHigh = yScale(high);
+      var yLow = yScale(low);
       var yOpen = yScale(open);
       var yClose = yScale(close);
-      var top = Math.min(yOpen, yClose);
-      var h = Math.max(Math.abs(yClose - yOpen), 2);
-      var bull = close >= open;
-      ctx.fillStyle = bull ? 'rgba(107,158,120,0.82)' : 'rgba(166,93,93,0.82)';
-      ctx.fillRect(cx - bw / 2, top, bw, h);
+      var bodyTop = Math.min(yOpen, yClose);
+      var bodyBottom = Math.max(yOpen, yClose);
+      var bodyH = Math.max(Math.round(bodyBottom - bodyTop), 1);
+
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 1;
+      ctx.lineCap = 'butt';
+      ctx.beginPath();
+      ctx.moveTo(cx + 0.5, strokeY(yHigh));
+      ctx.lineTo(cx + 0.5, strokeY(yLow));
+      ctx.stroke();
+
+      ctx.fillStyle = bodyColor;
+      ctx.fillRect(Math.round(cx - bw / 2), Math.round(bodyTop), bw, bodyH);
+    });
+
+    ctx.strokeStyle = 'rgba(201,169,98,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    data.forEach(function (row, i) {
+      var close = Number(row.close);
+      if (close !== close) close = 50;
+      close = Math.min(100, Math.max(0, close));
+      var x = xPos(i, n);
+      var y = yScale(close);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+
+    data.forEach(function (row, i) {
+      var isBoundary = i === 0 || (row.daYunRange && data[i - 1] && row.daYunRange !== data[i - 1].daYunRange);
+      if (!isBoundary) return;
+      var cx = xPos(i, n);
+      ctx.strokeStyle = 'rgba(201,169,98,0.24)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cx + 0.5, strokeY(plotTop));
+      ctx.lineTo(cx + 0.5, strokeY(plotBottom));
+      ctx.stroke();
+      ctx.setLineDash([]);
     });
 
     ctx.fillStyle = '#9a9288';
@@ -575,7 +778,17 @@
     ctx.fillText('1岁', padL, ch - 8);
     ctx.fillText(String(n) + '岁', cw - padR - 36, ch - 8);
 
-    if (hint) hint.textContent = '数据条数：' + n + ' · 竖向虚线为大限分界';
+    if (hint) {
+      hint.textContent = '数据条数：' + n + ' · 纵轴 ' + yMin + '–' + yMax + ' · 竖向虚线为大限分界';
+    }
+
+    klinePick.padL = padL;
+    klinePick.gw = gw;
+    klinePick.n = n;
+    klinePick.sorted = sortedKlineRows(data);
+    renderKlineTable(klinePick.sorted);
+    if (klinePick.sorted.length) renderKlineDetail(klinePick.sorted[0]);
+    bindKlineCanvas(canvas);
   }
 
   function validateKLine(data) {

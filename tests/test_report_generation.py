@@ -90,6 +90,18 @@ class ReportGenerationTests(unittest.TestCase):
         self.assertIn("术数推演仅供参考", html)
         self.assertIn('"palaces":', html)
         self.assertIn('"age":1', html)
+        self.assertNotIn('"engine":', html)
+        self.assertNotIn('"brightnessSource":', html)
+        self.assertNotIn('id="meta-engine"', html)
+        self.assertNotIn('id="meta-brightness-source"', html)
+        self.assertNotIn("排盘：", html)
+        self.assertNotIn("亮度：", html)
+
+    def test_chart_embed_omits_engine_and_brightness_metadata(self):
+        embed = gr.build_chart_embed(self.chart, 2026)
+        self.assertNotIn("engine", embed)
+        self.assertNotIn("engineVersion", embed)
+        self.assertNotIn("brightnessSource", embed)
 
     def test_merge_kline_briefs_does_not_override_ohlc(self):
         original = self.kline[0]

@@ -874,6 +874,44 @@ class ContextOutputTests(unittest.TestCase):
         longest_peak_run = max(longest_peak_run, current_run)
         self.assertLessEqual(longest_peak_run, 2)
 
+    def test_python_chart_includes_major_star_brightness_matching_iztro(self):
+        chart = zw.generate_chart(
+            1996,
+            1,
+            6,
+            11,
+            "female",
+            target_year=2026,
+            minute=40,
+            birthplace="广东省深圳市",
+            geocode_mode="offline",
+        )
+
+        def major_brightness(palace_name: str) -> dict[str, str]:
+            palace = next(p for p in chart["palaces"] if p["name"] == palace_name)
+            return {star["name"]: star.get("brightness", "") for star in palace["majorStars"]}
+
+        self.assertEqual(chart["fiveElementsClass"], "木三局")
+        self.assertEqual(major_brightness("命宫"), {"太阳": "旺"})
+        self.assertEqual(major_brightness("迁移宫"), {"天梁": "庙"})
+        self.assertEqual(major_brightness("官禄宫"), {"巨门": "陷"})
+        self.assertEqual(major_brightness("田宅宫"), {"紫微": "旺", "贪狼": "利"})
+        self.assertEqual(major_brightness("福德宫"), {"天机": "得", "太阴": "利"})
+
+    def test_minor_stars_use_canonical_order(self):
+        chart = zw.generate_chart(
+            1996,
+            1,
+            6,
+            11,
+            "female",
+            target_year=2026,
+            minute=40,
+            use_true_solar_time=False,
+        )
+        brother = next(p for p in chart["palaces"] if p["name"] == "兄弟宫")
+        self.assertEqual([s["name"] for s in brother["minorStars"]], ["天马", "地空", "地劫"])
+
     def test_payload_includes_algorithmic_kline_data(self):
         chart = zw.generate_chart(1995, 7, 19, 11, "male", target_year=2026, minute=40)
 
@@ -969,7 +1007,8 @@ class ReleaseHardeningTests(unittest.TestCase):
         text = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("GitHub 发布版保证", text)
         self.assertIn("失败契约", text)
-        self.assertIn("常见失败与排查", text)
+        self.assertIn("常见问题", text)
+        self.assertIn("日期格式不对或超出范围", text)
 
     def test_quickstart_script_uses_offline_mode_for_determinism(self):
         text = (ROOT / "examples" / "quickstart.sh").read_text(encoding="utf-8")
@@ -1029,6 +1068,8 @@ class ReportTemplateTests(unittest.TestCase):
     def test_template_has_age_meta_span(self):
         text = (ROOT / "report-template.html").read_text(encoding="utf-8")
         self.assertIn('id="meta-age"', text)
+        self.assertNotIn('id="meta-engine"', text)
+        self.assertNotIn('id="meta-brightness-source"', text)
 
 
 if __name__ == "__main__":
