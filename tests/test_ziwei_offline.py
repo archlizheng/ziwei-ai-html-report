@@ -749,6 +749,44 @@ class ContextOutputTests(unittest.TestCase):
         self.assertEqual(rows1[0]["open"], 50)
         self.assertEqual(rows1[31]["year"], 2026)
         self.assertIn("daYunRange", rows1[31])
+        highs = [float(row["high"]) for row in rows1]
+        closes = [float(row["close"]) for row in rows1]
+        lows = [float(row["low"]) for row in rows1]
+        self.assertLessEqual(max(highs), zw.KLINE_HIGH_CAP, msg="K-line high should stay below cap")
+        self.assertLessEqual(max(closes), zw.KLINE_CLOSE_CAP, msg="K-line close should stay below cap")
+        self.assertGreater(max(highs) - min(lows), 25.0)
+
+    def test_generate_kline_data_has_sparse_peaks_without_long_ceiling_plateau(self):
+        chart = zw.generate_chart(
+            1996,
+            1,
+            6,
+            11,
+            "female",
+            target_year=2026,
+            minute=40,
+            birthplace="深圳市",
+            geocode_mode="offline",
+        )
+
+        rows = zw.generate_kline_data(chart)
+        closes = [float(row["close"]) for row in rows]
+        highs = [float(row["high"]) for row in rows]
+
+        self.assertGreaterEqual(max(highs), 97.0)
+        self.assertLessEqual(sum(1 for value in closes if value >= 95.0), 8)
+        self.assertLessEqual(sum(1 for value in highs if value >= 98.0), 8)
+
+        longest_peak_run = 0
+        current_run = 0
+        for value in closes:
+            if value >= 95.0:
+                current_run += 1
+            else:
+                longest_peak_run = max(longest_peak_run, current_run)
+                current_run = 0
+        longest_peak_run = max(longest_peak_run, current_run)
+        self.assertLessEqual(longest_peak_run, 2)
 
     def test_payload_includes_algorithmic_kline_data(self):
         chart = zw.generate_chart(1995, 7, 19, 11, "male", target_year=2026, minute=40)

@@ -897,6 +897,39 @@ def _yearly_modifier(chart: Dict[str, Any], year: int) -> Tuple[float, List[str]
     return modifier, data["mutagens"]
 
 
+# K 线使用全生命 raw score 映射，允许少数高峰接近 100，但避免长段贴顶。
+KLINE_TARGET_CAP = 98.0
+KLINE_CLOSE_CAP = 98.0
+KLINE_HIGH_CAP = 100.0
+
+
+def _kline_visual_targets(raw_scores: List[float]) -> List[float]:
+    """Map raw fortune scores to display scores without flattening high years."""
+    if not raw_scores:
+        return []
+    if len(raw_scores) == 1:
+        return [50.0]
+
+    lo = min(raw_scores)
+    hi = max(raw_scores)
+    span = hi - lo
+    ordered = sorted(range(len(raw_scores)), key=lambda i: (raw_scores[i], i))
+    ranks = [0.0] * len(raw_scores)
+    for rank, index in enumerate(ordered):
+        ranks[index] = rank / (len(raw_scores) - 1)
+
+    targets: List[float] = []
+    for index, raw in enumerate(raw_scores):
+        absolute = 100.0 / (1.0 + math.exp(-(raw - 55.0) / 22.0))
+        relative = ranks[index] * 100.0
+        if span > 1e-6:
+            raw_position = ((raw - lo) / span) * 100.0
+            relative = relative * 0.7 + raw_position * 0.3
+        target = absolute * 0.7 + relative * 0.3
+        targets.append(max(0.0, min(KLINE_TARGET_CAP, target)))
+    return targets
+
+
 def generate_kline_data(chart: Dict[str, Any], birth_year: Optional[int] = None) -> List[Dict[str, Any]]:
     """Generate deterministic K-line data aligned with the app scoring model.
 
@@ -906,9 +939,8 @@ def generate_kline_data(chart: Dict[str, Any], birth_year: Optional[int] = None)
     """
     if birth_year is None:
         birth_year = int(chart["lunar"]["year"])
-    rows: List[Dict[str, Any]] = []
+    drafts: List[Dict[str, Any]] = []
     decadal_scores: Dict[str, float] = {}
-    prev_close = 50.0
     seed_prefix = f"{chart.get('birth', {}).get('effectiveSolar', '')}:{chart.get('birth', {}).get('timeBranch', '')}:{chart.get('lifePalace', {}).get('branch', '')}"
 
     for age in range(1, 101):
@@ -920,17 +952,63 @@ def generate_kline_data(chart: Dict[str, Any], birth_year: Optional[int] = None)
             decadal_scores[da_yun_range] = _palace_base_score(palace)
         decadal_base = decadal_scores[da_yun_range]
         yearly_delta, mutagens = _yearly_modifier(chart, year)
-        target = max(0.0, min(100.0, decadal_base + yearly_delta))
+        raw_target = decadal_base + yearly_delta
+        drafts.append({
+            "age": age,
+            "year": year,
+            "stem": stem,
+            "branch": branch,
+            "palace": palace,
+            "rawTarget": raw_target,
+            "yearlyMutagens": mutagens,
+        })
+
+    targets = _kline_visual_targets([row["rawTarget"] for row in drafts])
+    rows: List[Dict[str, Any]] = []
+    prev_close = 50.0
+
+    for draft, target in zip(drafts, targets):
+        age = int(draft["age"])
+        year = int(draft["year"])
+        stem = str(draft["stem"])
+        branch = str(draft["branch"])
+        palace = draft["palace"]
+        da_yun_range = str(palace["decadalRange"])
         open_v = prev_close
         seed = f"{seed_prefix}:{age}:{year}"
         move_ratio = _seeded_between(seed + ":move", 0.3, 0.7)
         close_base = open_v + (target - open_v) * move_ratio
-        close_v = max(0.0, min(100.0, close_base + _seeded_between(seed + ":close", -7.5, 7.5)))
+        noise = _seeded_between(seed + ":close", -5.0, 5.0)
+        close_v = max(0.0, min(KLINE_CLOSE_CAP, close_base + noise))
         mid = (open_v + close_v) / 2.0
-        volatility = abs(target - open_v) * 0.3 + _seeded_between(seed + ":volatility", 0.0, 10.0)
-        high_v = min(100.0, max(open_v, close_v) + volatility * _seeded_between(seed + ":high", 0.5, 1.0))
-        low_v = max(0.0, min(open_v, close_v) - volatility * _seeded_between(seed + ":low", 0.5, 1.0))
-        score = max(0, min(100, round((open_v + close_v + high_v + low_v) / 4.0)))
+        body_top = max(open_v, close_v)
+        body_bottom = min(open_v, close_v)
+        volatility = abs(target - open_v) * 0.3 + _seeded_between(seed + ":volatility", 0.0, 8.0)
+        upper_room = max(0.0, KLINE_HIGH_CAP - body_top)
+        lower_room = max(0.0, body_bottom)
+        high_boost = volatility * _seeded_between(seed + ":high", 0.25, 0.55)
+        low_drop = volatility * _seeded_between(seed + ":low", 0.25, 0.55)
+        if upper_room <= 0.01:
+            high_ext = 0.0
+        else:
+            if target >= 97.0:
+                high_ext = min(max(high_boost, upper_room * 0.55), upper_room * 0.8)
+            else:
+                high_room_ratio = 0.75 if target >= 96.0 else 0.5
+                high_ext = min(high_boost, upper_room * high_room_ratio)
+        high_v = max(body_top, min(KLINE_HIGH_CAP, body_top + high_ext))
+        if lower_room <= 0.01:
+            low_v = body_bottom
+        else:
+            soft_floor = 1.0 if body_bottom > 12.0 else 0.0
+            low_v = max(soft_floor, body_bottom - min(low_drop, lower_room * 0.55))
+        low_v = min(low_v, body_bottom)
+        score = max(0, min(int(KLINE_HIGH_CAP), round((open_v + close_v + high_v + low_v) / 4.0)))
+        dim_cap = int(KLINE_HIGH_CAP)
+
+        def _dim(raw: float) -> int:
+            return max(0, min(dim_cap, _normalize_score(raw)))
+
         rows.append({
             "age": age,
             "year": year,
@@ -943,12 +1021,12 @@ def generate_kline_data(chart: Dict[str, Any], birth_year: Optional[int] = None)
             "low": round(low_v, 2),
             "score": score,
             "dimensions": {
-                "career": _normalize_score(mid + _seeded_between(seed + ":career", -7.5, 7.5)),
-                "wealth": _normalize_score(mid * 0.95 + _seeded_between(seed + ":wealth", -7.5, 7.5)),
-                "relationship": _normalize_score(mid * 0.9 + _seeded_between(seed + ":relationship", -7.5, 7.5)),
-                "health": _normalize_score(mid * 0.92 + _seeded_between(seed + ":health", -7.5, 7.5)),
+                "career": _dim(mid + _seeded_between(seed + ":career", -7.5, 7.5)),
+                "wealth": _dim(mid * 0.95 + _seeded_between(seed + ":wealth", -7.5, 7.5)),
+                "relationship": _dim(mid * 0.9 + _seeded_between(seed + ":relationship", -7.5, 7.5)),
+                "health": _dim(mid * 0.92 + _seeded_between(seed + ":health", -7.5, 7.5)),
             },
-            "yearlyMutagens": mutagens,
+            "yearlyMutagens": draft["yearlyMutagens"],
         })
         prev_close = round(close_v, 2)
     return rows
